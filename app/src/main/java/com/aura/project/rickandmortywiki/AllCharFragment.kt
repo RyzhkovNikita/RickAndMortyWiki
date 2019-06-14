@@ -26,7 +26,7 @@ class AllCharFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AllCharViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel.loadPage()
     }
 
 }

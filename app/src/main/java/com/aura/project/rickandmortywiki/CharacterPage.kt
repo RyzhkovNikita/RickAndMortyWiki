@@ -2,9 +2,11 @@ package com.aura.project.rickandmortywiki
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 data class CharacterPage(
     val info: Info,
+    @SerializedName("results")
     val characters: List<Character>
 )
 
