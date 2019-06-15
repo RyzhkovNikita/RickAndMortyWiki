@@ -1,21 +1,22 @@
 package com.aura.project.rickandmortywiki
 
-class CharRepo(charDao: CharDao, charApi: ApiService): CharacterDataSource {
-    val netRepo = CharNetRepo(charApi)
-    val localRepo = CharLocalRepo(charDao)
-    override fun getCharPage(page: Int): List<Character> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+class CharRepo(charDao: CharDao, charApi: ApiService) : CharacterDataSource {
+    private val netRepo = CharNetRepo(charApi)
+    private val localRepo = CharLocalRepo(charDao)
+    override fun getCharPage(page: Int): List<Character>? =
+        localRepo.getCharPage(page) ?: netRepo.getCharPage(page)
+
 
     override fun insertChars(chars: List<Character>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        localRepo.insertChars(chars)
+        netRepo.insertChars(chars)
     }
 
     override fun clearAll() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        localRepo.clearAll()
+        netRepo.clearAll()
     }
 
-    override fun getChar(id: Int): Character? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getChar(id: Int): Character? =
+        localRepo.getChar(id) ?: netRepo.getChar(id)
 }

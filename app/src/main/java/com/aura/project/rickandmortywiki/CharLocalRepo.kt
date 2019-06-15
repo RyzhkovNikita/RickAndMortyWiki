@@ -5,13 +5,13 @@ class CharLocalRepo(private val charDao: CharDao) : CharacterDataSource {
     private val _PAGE_SIZE = 20
 
     /*
-    return empty list, if there is no this page
+    return NULL, if there is no this page
     return list of char by the page
      */
-    override fun getCharPage(page: Int): List<Character> {
+    override fun getCharPage(page: Int): List<Character>? {
         val charList = charDao.getBetween((page - 1) * _PAGE_SIZE + 1, page * _PAGE_SIZE)
         if (charList.size < _PAGE_SIZE)
-            return emptyList()
+            return null
         return charList.sortedBy { character -> character.id }
     }
 
