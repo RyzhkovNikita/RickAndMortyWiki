@@ -17,18 +17,22 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
         get() = _charList
     private val db = AppDatabase.getInstance(getApplication())
     private val net = ApiService.getInstance()
+    private val charRepo = CharRepo(
+        AppDatabase.getInstance(getApplication()).charDao(),
+        ApiService.getInstance()
+    )
     fun loadPage() {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
-                val result = net.getCharPage().getCharPage()
+                val result = net.getCharPageCall().getPage()
                 result.logAll()
             }
         }
     }
 
-    suspend fun Call<CharacterPage>.getCharPage(): CharacterPage? =
+    suspend fun Call<CharacterPage>.getPage(): CharacterPage? =
         withContext(Dispatchers.IO) {
-            this@getCharPage.execute().body()
+            this@getPage.execute().body()
         }
 
 

@@ -1,6 +1,5 @@
 package com.aura.project.rickandmortywiki
 
-import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -10,7 +9,7 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET("character/")
-    fun getCharPage(): Call<CharacterPage>
+    fun getCharPageCall(): Call<CharacterPage>
 
     companion object {
         @Volatile
