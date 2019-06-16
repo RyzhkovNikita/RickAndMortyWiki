@@ -19,6 +19,9 @@ interface CharDao {
     @Query("delete from character")
     fun clearAll()
 
-    @Query("select 1 from character where id=:charId")
+    @Query("select * from character where id=:charId")
     fun getById(charId: Int): List<Character>
+
+    @Query("select * from character where id in (:idList)")
+    fun getById(idList: List<Int>): List<Character>
 }

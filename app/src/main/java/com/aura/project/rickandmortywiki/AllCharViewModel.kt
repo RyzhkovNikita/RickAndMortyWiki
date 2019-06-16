@@ -15,17 +15,22 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
     private val _charList = MutableLiveData<List<Character>>()
     val charList: LiveData<List<Character>>
         get() = _charList
-    private val db = AppDatabase.getInstance(getApplication())
-    private val net = ApiService.getInstance()
     private val charRepo = CharRepo(
         AppDatabase.getInstance(getApplication()).charDao(),
         ApiService.getInstance()
     )
+
+    init {
+        loadPage()
+    }
+
     fun loadPage() {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
-                val result = net.getCharPageCall().getPage()
-                result.logAll()
+                when (val pageResult = charRepo.getCharPage(0)) {
+                    is SuccessfulRequest -> _charList.value = pageResult.body
+                    is FailedRequest -> _charList.value = emptyList()
+                }
             }
         }
     }

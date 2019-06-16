@@ -24,7 +24,29 @@ data class Character(
     val status: String,
     val type: String,
     val url: String
-)
+) {
+    companion object {
+        fun emptyChar(): Character {
+            val emptyStr = ""
+            val origin = Origin(emptyStr, emptyStr)
+            val location = Location(emptyStr, emptyStr)
+            return Character(
+                emptyStr,
+                emptyList(),
+                emptyStr,
+                -1,
+                emptyStr,
+                location,
+                emptyStr,
+                origin,
+                emptyStr,
+                emptyStr,
+                emptyStr,
+                emptyStr
+            )
+        }
+    }
+}
 
 data class Origin(
     val name: String,

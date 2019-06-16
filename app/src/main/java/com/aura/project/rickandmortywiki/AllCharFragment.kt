@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.paging.PagedList
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.all_char_fragment.*
 
 class AllCharFragment : Fragment() {
 
@@ -26,7 +28,9 @@ class AllCharFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AllCharViewModel::class.java)
-        viewModel.loadPage()
+        val config = PagedList.Config.Builder().setPageSize(20).setEnablePlaceholders(false).build()
+        PagedList.Builder<>(,config)
+        TODO("create datasource")
     }
 
 }
