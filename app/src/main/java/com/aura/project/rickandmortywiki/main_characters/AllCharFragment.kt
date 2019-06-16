@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.paging.PagedList
-import com.aura.project.rickandmortywiki.CharDiffCallback
+import androidx.recyclerview.widget.RecyclerView
 import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.data.Character
+
 
 class AllCharFragment : Fragment() {
 
@@ -29,8 +29,11 @@ class AllCharFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.all_char_fragment, container, false)
         _adapter = CharacterAdapter(this.context!!)
-        return inflater.inflate(R.layout.all_char_fragment, container, false)
+        val recyclerView: RecyclerView = view.findViewById(R.id.char_recycler)
+        recyclerView.adapter = _adapter
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

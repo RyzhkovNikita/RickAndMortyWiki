@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki.data.room.character.repository
+package com.aura.project.rickandmortywiki.data.repository
 
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.request.RepoRequest
