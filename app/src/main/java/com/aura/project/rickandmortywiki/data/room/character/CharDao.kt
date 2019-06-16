@@ -1,9 +1,10 @@
-package com.aura.project.rickandmortywiki
+package com.aura.project.rickandmortywiki.data.room.character
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.aura.project.rickandmortywiki.data.Character
 
 @Dao
 interface CharDao {

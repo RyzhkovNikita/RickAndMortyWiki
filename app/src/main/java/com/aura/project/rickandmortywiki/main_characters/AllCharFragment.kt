@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki
+package com.aura.project.rickandmortywiki.main_characters
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
+import com.aura.project.rickandmortywiki.CharDiffCallback
+import com.aura.project.rickandmortywiki.R
+import com.aura.project.rickandmortywiki.data.Character
 
 class AllCharFragment : Fragment() {
 
@@ -17,11 +20,8 @@ class AllCharFragment : Fragment() {
 
     private lateinit var viewModel: AllCharViewModel
 
-    private val pagedListObserver = object : Observer<PagedList<Character>> {
-        override fun onChanged(pagedList: PagedList<Character>?) {
-            _adapter.submitList(pagedList)
-        }
-    }
+    private val pagedListObserver =
+        Observer<List<Character>> { newList -> _adapter.charList = newList }
 
     private lateinit var _adapter: CharacterAdapter
 
@@ -29,7 +29,7 @@ class AllCharFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _adapter = CharacterAdapter(CharDiffCallback(), this.context!!)
+        _adapter = CharacterAdapter(this.context!!)
         return inflater.inflate(R.layout.all_char_fragment, container, false)
     }
 

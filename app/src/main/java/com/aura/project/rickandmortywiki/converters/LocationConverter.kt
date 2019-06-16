@@ -1,6 +1,7 @@
-package com.aura.project.rickandmortywiki
+package com.aura.project.rickandmortywiki.converters
 
 import androidx.room.TypeConverter
+import com.aura.project.rickandmortywiki.data.Location
 
 class LocationConverter {
     private val separator = ";:;"

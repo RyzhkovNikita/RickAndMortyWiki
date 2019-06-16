@@ -1,9 +1,17 @@
-package com.aura.project.rickandmortywiki
+package com.aura.project.rickandmortywiki.data.room.character.repository
 
-class CharRepo(charDao: CharDao, charApi: ApiService) : CharacterDataSource {
+import com.aura.project.rickandmortywiki.data.retrofit.ApiService
+import com.aura.project.rickandmortywiki.data.room.character.CharDao
+import com.aura.project.rickandmortywiki.data.Character
+import com.aura.project.rickandmortywiki.data.request.FailedRequest
+import com.aura.project.rickandmortywiki.data.request.RepoRequest
+import com.aura.project.rickandmortywiki.data.request.SuccessfulRequest
+
+class CharRepo(charDao: CharDao, charApi: ApiService) :
+    CharacterDataSource {
     private val netRepo = CharNetRepo(charApi)
     private val localRepo = CharLocalRepo(charDao)
-    override fun getCharPage(page: Int): RepoResult<List<Character>> =
+    override fun getCharPage(page: Int): RepoRequest<List<Character>> =
         when (val localCharPage = localRepo.getCharPage(page)) {
             is SuccessfulRequest -> {
                 localCharPage.body.sortedBy { character -> character.id }
@@ -25,7 +33,7 @@ class CharRepo(charDao: CharDao, charApi: ApiService) : CharacterDataSource {
         netRepo.clearAll()
     }
 
-    override fun getChar(id: Int): RepoResult<Character> =
+    override fun getChar(id: Int): RepoRequest<Character> =
         when (val localRepoResult = localRepo.getChar(id)) {
             is SuccessfulRequest -> localRepoResult
             is FailedRequest -> netRepo.getChar(id)
@@ -33,7 +41,7 @@ class CharRepo(charDao: CharDao, charApi: ApiService) : CharacterDataSource {
 
         }
 
-    override fun getChars(ids: List<Int>): RepoResult<List<Character>> {
+    override fun getChars(ids: List<Int>): RepoRequest<List<Character>> {
         val localResult = localRepo.getChars(ids)
         return if (localResult is SuccessfulRequest) {
             val idsNeedFromNet = ids.minus(localResult.body.map { char -> char.id })

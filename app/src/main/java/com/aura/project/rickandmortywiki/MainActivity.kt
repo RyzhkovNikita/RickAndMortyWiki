@@ -2,6 +2,7 @@ package com.aura.project.rickandmortywiki
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.aura.project.rickandmortywiki.main_characters.AllCharFragment
 
 class MainActivity : AppCompatActivity() {
 

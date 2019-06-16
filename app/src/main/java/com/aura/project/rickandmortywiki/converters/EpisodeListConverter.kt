@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki
+package com.aura.project.rickandmortywiki.converters
 
 import androidx.room.TypeConverter
 

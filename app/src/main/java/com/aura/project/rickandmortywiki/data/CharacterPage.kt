@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki
+package com.aura.project.rickandmortywiki.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

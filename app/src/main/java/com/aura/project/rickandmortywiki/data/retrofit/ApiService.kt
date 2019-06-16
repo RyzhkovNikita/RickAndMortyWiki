@@ -1,5 +1,7 @@
-package com.aura.project.rickandmortywiki
+package com.aura.project.rickandmortywiki.data.retrofit
 
+import com.aura.project.rickandmortywiki.data.Character
+import com.aura.project.rickandmortywiki.data.CharacterPage
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -20,8 +22,10 @@ interface ApiService {
         private var instance: ApiService? = null
         private val lock = Any()
 
-        fun getInstance(): ApiService = instance ?: synchronized(lock) {
-            instance ?: buildRetrofit().also { instance = it }
+        fun getInstance(): ApiService = instance
+            ?: synchronized(lock) {
+            instance
+                ?: buildRetrofit().also { instance = it }
         }
 
         private fun buildRetrofit() = Retrofit.Builder()
