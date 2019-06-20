@@ -17,6 +17,9 @@ interface ApiService {
     @GET("character/{id}")
     fun getCharById(@Path("id") id: Int): Call<Character>
 
+    @GET("character/{ids}")
+    fun getCharsById(@Path("ids") list: String): Call<List<Character>>
+
     companion object {
         @Volatile
         private var instance: ApiService? = null

@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.main_frame, AllCharFragment.newInstance())
+            .replace(R.id.main_frame, MainShowFragment.newInstance())
             .commit()
     }
 }
