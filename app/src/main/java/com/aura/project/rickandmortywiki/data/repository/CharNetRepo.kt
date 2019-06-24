@@ -9,9 +9,9 @@ import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
 
     override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> {
-        val response = charApi.getCharPageCall().execute()
+        val response = charApi.getCharPage(page).execute()
         if (response.isSuccessful)
-            return SuccessfulRequest(response.body()!!.characters)
+            return SuccessfulRequest(body = response.body()!!.characters, source = SuccessfulRequest.FROM_NET)
         return FailedRequest()
     }
 
@@ -19,11 +19,11 @@ class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
 
     override suspend fun clearAll() {}
 
-    override suspend fun getChars(ids: List<Int>): RepoRequest<List<Character>> {
-        val requestPath = ids.fold("", { path, id -> path.plus(",$id") })
+    override suspend fun getChars(ids: IntArray): RepoRequest<List<Character>> {
+        val requestPath = ids.joinToString(separator = ",", transform = { it.toString() })
         val response = charApi.getCharsById(requestPath).execute()
         if (response.isSuccessful)
-            return SuccessfulRequest(response.body()!!)
+            return SuccessfulRequest(body = response.body()!!, source = SuccessfulRequest.FROM_NET)
         return FailedRequest()
     }
 
@@ -31,7 +31,7 @@ class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
     override suspend fun getChar(id: Int): RepoRequest<Character> {
         val response = charApi.getCharById(id).execute()
         if (response.isSuccessful)
-            return SuccessfulRequest(response.body()!!)
+            return SuccessfulRequest(body = response.body()!!, source = SuccessfulRequest.FROM_NET)
         return FailedRequest()
     }
 }

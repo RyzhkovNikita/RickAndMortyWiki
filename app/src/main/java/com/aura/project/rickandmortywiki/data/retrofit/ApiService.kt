@@ -8,11 +8,12 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
     @GET("character/")
-    fun getCharPageCall(): Call<CharacterPage>
+    fun getCharPage(@Query("page") page: Int): Call<CharacterPage>
 
     @GET("character/{id}")
     fun getCharById(@Path("id") id: Int): Call<Character>

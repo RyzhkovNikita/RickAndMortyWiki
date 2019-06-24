@@ -1,10 +1,10 @@
 package com.aura.project.rickandmortywiki.data.repository
 
-import com.aura.project.rickandmortywiki.data.room.character.CharDao
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.request.FailedRequest
 import com.aura.project.rickandmortywiki.data.request.RepoRequest
 import com.aura.project.rickandmortywiki.data.request.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.room.character.CharDao
 
 class CharLocalRepo(private val charDao: CharDao) :
     CharacterDataSource {
@@ -15,7 +15,7 @@ class CharLocalRepo(private val charDao: CharDao) :
         val charList = charDao.getBetween((page - 1) * _PAGE_SIZE + 1, page * _PAGE_SIZE)
         if (charList.size == _PAGE_SIZE) {
             val result = charList.sortedBy { character -> character.id }
-            return SuccessfulRequest(result)
+            return SuccessfulRequest(body = result, source = SuccessfulRequest.FROM_LOCAL)
         }
         return FailedRequest()
     }
@@ -31,10 +31,13 @@ class CharLocalRepo(private val charDao: CharDao) :
     override suspend fun getChar(id: Int): RepoRequest<Character> {
         val char = charDao.getById(id)
         if (char.isNotEmpty())
-            return SuccessfulRequest(char[0])
+            return SuccessfulRequest(body = char[0], source = SuccessfulRequest.FROM_LOCAL)
         return FailedRequest()
     }
 
-    override suspend fun getChars(ids: List<Int>): RepoRequest<List<Character>> =
-        SuccessfulRequest(charDao.getById(ids).sortedBy { character -> character.id })
+    override suspend fun getChars(ids: IntArray): RepoRequest<List<Character>> =
+        SuccessfulRequest(
+            body = charDao.getById(ids).sortedBy { character -> character.id }
+            , source = SuccessfulRequest.FROM_LOCAL
+        )
 }

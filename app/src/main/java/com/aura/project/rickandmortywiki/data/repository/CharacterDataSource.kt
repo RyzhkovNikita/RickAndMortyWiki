@@ -8,5 +8,5 @@ interface CharacterDataSource {
     suspend fun insertChars(chars: List<Character>)
     suspend fun clearAll()
     suspend fun getChar(id: Int): RepoRequest<Character>
-    suspend fun getChars(ids: List<Int>): RepoRequest<List<Character>>
+    suspend fun getChars(ids: IntArray): RepoRequest<List<Character>>
 }

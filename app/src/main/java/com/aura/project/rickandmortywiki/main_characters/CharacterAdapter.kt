@@ -1,6 +1,5 @@
 package com.aura.project.rickandmortywiki.main_characters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,16 +11,20 @@ import com.aura.project.rickandmortywiki.CharDiffCallback
 import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.data.Character
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.coroutines.*
 
-class CharacterAdapter(private var fragment: AllCharFragment?) :
-    RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
+class CharacterAdapter(fragment: AllCharFragment?) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
-    private val scope = CoroutineScope(Dispatchers.Main)
+    private val PAGE_SIZE = 20
+    private var _onCharClickListener: OnCharClickListener? = fragment
+    private var _loader: CharacterLoader? = fragment
+    private val _context = fragment!!.context
+    private val _scope = CoroutineScope(Dispatchers.Main)
 
     var charList: List<Character> = ArrayList()
         set(value) {
-            scope.launch {
+            _scope.launch {
                 val diffResult = calculateDiff(field, value)
                 field = value
                 diffResult.dispatchUpdatesTo(this@CharacterAdapter)
@@ -36,32 +39,48 @@ class CharacterAdapter(private var fragment: AllCharFragment?) :
     override fun getItemCount(): Int = charList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder =
-        CharacterViewHolder(fragment?.context!!, parent)
+        CharacterViewHolder(LayoutInflater.from(_context).inflate(R.layout.character_card, parent, false))
 
-    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) = holder.bind(charList[position])
+    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
+        holder bindBy charList[position]
+        if (charList.size - position == PAGE_SIZE) _loader?.endReached()
+    }
 
 
     @ExperimentalCoroutinesApi
     fun onDestroy() {
-        fragment = null
-        scope.cancel()
+        _onCharClickListener = null
+        _scope.cancel()
     }
 
+    interface OnCharClickListener {
+        fun onCharClicked(character: Character)
+    }
 
-    class CharacterViewHolder(private val context: Context, parent: ViewGroup) :
-        RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.character_card, parent, false)),
-        View.OnClickListener {
+    interface CharacterLoader {
+        fun endReached()
+    }
+
+    inner class CharacterViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+        init {
+            view.setOnClickListener(this)
+        }
+
         override fun onClick(v: View?) {
-            TODO("call fragment from where")
+            _onCharClickListener?.onCharClicked(charList[adapterPosition])
         }
 
         private var avatar: ImageView = itemView.findViewById(R.id.char_avatar)
         private var name: TextView = itemView.findViewById(R.id.char_name_tv)
 
 
-        fun bind(character: Character) {
+        infix fun bindBy(character: Character) {
             name.text = character.name
-            Glide.with(context).load(character.image).into(avatar)
+            Glide.with(_context!!)
+                .load(character.image)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error(R.drawable.char_error_avatar)
+                .into(avatar)
         }
     }
 }

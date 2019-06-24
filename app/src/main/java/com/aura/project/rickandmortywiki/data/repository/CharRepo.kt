@@ -48,7 +48,7 @@ class CharRepo(charDao: CharDao, charApi: ApiService) :
             }
         }
 
-    override suspend fun getChars(ids: List<Int>): RepoRequest<List<Character>> =
+    override suspend fun getChars(ids: IntArray): RepoRequest<List<Character>> =
         withContext(Dispatchers.IO) {
             when (val netResult = netRepo.getChars(ids)) {
                 is SuccessfulRequest -> netResult

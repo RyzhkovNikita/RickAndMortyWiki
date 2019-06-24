@@ -24,5 +24,5 @@ interface CharDao {
     fun getById(charId: Int): List<Character>
 
     @Query("select * from character where id in (:idList)")
-    fun getById(idList: List<Int>): List<Character>
+    fun getById(idList: IntArray): List<Character>
 }
