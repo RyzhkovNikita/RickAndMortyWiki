@@ -8,10 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aura.project.rickandmortywiki.CharDiffCallback
+import com.aura.project.rickandmortywiki.ImageLoader
 import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.data.Character
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.coroutines.*
 
 class CharacterAdapter(fragment: AllCharFragment?) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
@@ -76,11 +75,13 @@ class CharacterAdapter(fragment: AllCharFragment?) : RecyclerView.Adapter<Charac
 
         infix fun bindBy(character: Character) {
             name.text = character.name
-            Glide.with(_context!!)
-                .load(character.image)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(R.drawable.char_error_avatar)
-                .into(avatar)
+            ImageLoader
+                .with(_context!!)
+                .from(character.image)
+                .to(avatar)
+                .cutCircle()
+                .errorImage(R.drawable.char_error_avatar)
+                .load()
         }
     }
 }

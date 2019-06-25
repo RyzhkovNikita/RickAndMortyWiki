@@ -5,23 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.ProgressBar
-import androidx.constraintlayout.solver.widgets.ConstraintHorizontalLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import com.aura.project.rickandmortywiki.Callback
 import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.data.Character
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
-class AllCharFragment : Fragment(), CharacterAdapter.OnCharClickListener, CharacterAdapter.CharacterLoader {
+class AllCharFragment(private val callback: Callback) : Fragment(), CharacterAdapter.OnCharClickListener, CharacterAdapter.CharacterLoader {
 
     companion object {
-        fun newInstance() = AllCharFragment()
+        fun newInstance(callback: Callback) = AllCharFragment(callback)
     }
 
     private lateinit var _viewModel: AllCharViewModel
@@ -36,7 +35,7 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnCharClickListener, Charac
     private val _progressBarObserver = Observer<Boolean> { inProgress ->
         _progressBar.visibility = if (inProgress) View.VISIBLE else View.GONE
     }
-    private val _showErrorObserver = Observer<Boolean> {shouldShowError ->
+    private val _showErrorObserver = Observer<Boolean> { shouldShowError ->
         _errorBlock.visibility = if (shouldShowError) View.VISIBLE else View.GONE
     }
 
@@ -48,7 +47,7 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnCharClickListener, Charac
         val view = inflater.inflate(R.layout.all_char_fragment, container, false)
         _progressBar = view.findViewById(R.id.all_char_progress)
         _errorBlock = view.findViewById(R.id.all_char_error)
-        _errorBlock.findViewById<Button>(R.id.error_button).setOnClickListener { _viewModel.tryButtonClicked()}
+        _errorBlock.findViewById<Button>(R.id.error_button).setOnClickListener { _viewModel.tryButtonClicked() }
         _adapter = CharacterAdapter(this)
         _recyclerView = view.findViewById(R.id.char_recycler)
         _recyclerView.adapter = _adapter
@@ -64,7 +63,7 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnCharClickListener, Charac
     }
 
     override fun onCharClicked(character: Character) {
-        TODO("navigation to charDetail fragment")
+        callback.onCharacterCardClicked(character)
     }
 
     override fun endReached() {

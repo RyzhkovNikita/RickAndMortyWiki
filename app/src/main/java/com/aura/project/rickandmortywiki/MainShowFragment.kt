@@ -24,13 +24,13 @@ class MainShowFragment : Fragment(), Callback {
     }
 
     override fun onCharacterCardClicked(character: Character) {
-        replace(CharacterDetailsFragment.newInstance(character), "detail ${character.id}")
+        replace(CharacterDetailsFragment.newInstance(character), "detailChar ${character.id}")
     }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        savedInstanceState ?: replace(AllCharFragment.newInstance())
+        savedInstanceState ?: replace(AllCharFragment.newInstance(this))
     }
 
     private fun replace(fragment: Fragment, tag: String = "") {
