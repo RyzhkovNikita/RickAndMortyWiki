@@ -12,41 +12,19 @@ data class CharacterPage(
 
 @Entity
 data class Character(
-    val created: String,
-    val episode: List<String>,
-    val gender: String,
+    var created: String,
+    var episode: List<String>,
+    var gender: String,
     @PrimaryKey val id: Int,
-    val image: String,
-    val location: Location,
-    val name: String,
-    val origin: Origin,
-    val species: String,
-    val status: String,
-    val type: String,
-    val url: String
-) {
-    companion object {
-        fun emptyChar(): Character {
-            val emptyStr = ""
-            val origin = Origin(emptyStr, emptyStr)
-            val location = Location(emptyStr, emptyStr)
-            return Character(
-                emptyStr,
-                emptyList(),
-                emptyStr,
-                -1,
-                emptyStr,
-                location,
-                emptyStr,
-                origin,
-                emptyStr,
-                emptyStr,
-                emptyStr,
-                emptyStr
-            )
-        }
-    }
-}
+    var image: String,
+    var location: Location,
+    var name: String,
+    var origin: Origin,
+    var species: String,
+    var status: String,
+    var type: String,
+    var url: String
+)
 
 data class Origin(
     val name: String,

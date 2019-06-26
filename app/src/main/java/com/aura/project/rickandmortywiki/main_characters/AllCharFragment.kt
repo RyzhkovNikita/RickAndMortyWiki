@@ -17,7 +17,8 @@ import com.aura.project.rickandmortywiki.data.Character
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
-class AllCharFragment(private val callback: Callback) : Fragment(), CharacterAdapter.OnCharClickListener, CharacterAdapter.CharacterLoader {
+class AllCharFragment(private var callback: Callback? = null) : Fragment(), CharacterAdapter.OnCharClickListener,
+    CharacterAdapter.CharacterLoader {
 
     companion object {
         fun newInstance(callback: Callback) = AllCharFragment(callback)
@@ -63,7 +64,7 @@ class AllCharFragment(private val callback: Callback) : Fragment(), CharacterAda
     }
 
     override fun onCharClicked(character: Character) {
-        callback.onCharacterCardClicked(character)
+        callback?.onCharacterCardClicked(character)
     }
 
     override fun endReached() {
@@ -74,6 +75,7 @@ class AllCharFragment(private val callback: Callback) : Fragment(), CharacterAda
     @ExperimentalCoroutinesApi
     override fun onDestroy() {
         _adapter.onDestroy()
+        callback = null
         super.onDestroy()
     }
 
