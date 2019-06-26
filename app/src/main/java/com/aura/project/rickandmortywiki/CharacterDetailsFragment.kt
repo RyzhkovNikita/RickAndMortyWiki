@@ -1,13 +1,14 @@
 package com.aura.project.rickandmortywiki
 
-import androidx.lifecycle.ViewModelProviders
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.aura.project.rickandmortywiki.data.Character
 
 
@@ -25,7 +26,7 @@ class CharacterDetailsFragment(val character: Character) : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.character_details_fragment, container, false)
         val deadImageView: ImageView = view.findViewById(R.id.details_dead_image)
-        when (character.status){
+        when (character.status) {
             "Dead" -> deadImageView.visibility = View.VISIBLE
             else -> deadImageView.visibility = View.GONE
         }
@@ -36,8 +37,17 @@ class CharacterDetailsFragment(val character: Character) : Fragment() {
             .to(avatar)
             .errorImage(R.drawable.char_error_avatar)
             .load()
-        val name: TextView = view.findViewById(R.id.details_name_text)
-        name.text = character.name
+        val nameTv: TextView = view.findViewById(R.id.details_name_text)
+        nameTv.text = character.name
+        val genderSignDrawable: Drawable? = when (character.gender) {
+            "Male" -> context?.getDrawable(R.drawable.male_sign)
+            "Female" -> context?.getDrawable(R.drawable.female_sign)
+            else -> null
+        }
+        val pixelDrawableSize = (nameTv.lineHeight * 0.8).toInt()
+        genderSignDrawable?.setBounds(0, 0, pixelDrawableSize, pixelDrawableSize)
+        nameTv.setCompoundDrawables(null, null, genderSignDrawable, null)
+        nameTv.compoundDrawablePadding = 8
         return view
     }
 
