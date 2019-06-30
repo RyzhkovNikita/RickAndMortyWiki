@@ -2,4 +2,7 @@
     <string name="app_name">RickAndMortyWiki</string>
     <string name="try_again">Try again</string>
     <string name="network_is_not_available">Network is not available</string>
+    <string name="origin">Origin:</string>
+    <string name="location">Location:</string>
+    <string name="episodes">Episodes:</string>
 </resources>

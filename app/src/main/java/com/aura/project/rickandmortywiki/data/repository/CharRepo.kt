@@ -1,9 +1,9 @@
 package com.aura.project.rickandmortywiki.data.repository
 
 import com.aura.project.rickandmortywiki.data.Character
-import com.aura.project.rickandmortywiki.data.request.FailedRequest
-import com.aura.project.rickandmortywiki.data.request.RepoRequest
-import com.aura.project.rickandmortywiki.data.request.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.FailedRequest
+import com.aura.project.rickandmortywiki.data.RepoRequest
+import com.aura.project.rickandmortywiki.data.SuccessfulRequest
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.character.CharDao
 import kotlinx.coroutines.Dispatchers
@@ -19,8 +19,6 @@ class CharRepo(charDao: CharDao, charApi: ApiService) :
                 is SuccessfulRequest -> netCharPage
 
                 is FailedRequest -> localRepo.getCharPage(page)
-
-                else -> FailedRequest()
             }
         }
 
@@ -43,8 +41,6 @@ class CharRepo(charDao: CharDao, charApi: ApiService) :
                 is SuccessfulRequest -> netResult
 
                 is FailedRequest -> localRepo.getChar(id)
-
-                else -> FailedRequest()
             }
         }
 
@@ -54,8 +50,6 @@ class CharRepo(charDao: CharDao, charApi: ApiService) :
                 is SuccessfulRequest -> netResult
 
                 is FailedRequest -> localRepo.getChars(ids)
-
-                else -> FailedRequest()
             }
         }
 }

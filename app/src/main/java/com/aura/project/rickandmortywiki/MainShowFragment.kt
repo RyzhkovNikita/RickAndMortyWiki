@@ -24,7 +24,7 @@ class MainShowFragment : Fragment(), Callback {
     }
 
     override fun onCharacterCardClicked(character: Character) {
-        replace(CharacterDetailsFragment.newInstance(character), "detailChar ${character.id}")
+        replace(CharacterDetailsFragment.getInstance(character), "detailChar ${character.id}")
     }
 
 

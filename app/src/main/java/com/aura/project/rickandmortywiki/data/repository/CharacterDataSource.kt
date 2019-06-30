@@ -1,7 +1,7 @@
 package com.aura.project.rickandmortywiki.data.repository
 
 import com.aura.project.rickandmortywiki.data.Character
-import com.aura.project.rickandmortywiki.data.request.RepoRequest
+import com.aura.project.rickandmortywiki.data.RepoRequest
 
 interface CharacterDataSource {
     suspend fun getCharPage(page: Int): RepoRequest<List<Character>>

@@ -1,9 +1,9 @@
 package com.aura.project.rickandmortywiki.data.repository
 
 import com.aura.project.rickandmortywiki.data.Character
-import com.aura.project.rickandmortywiki.data.request.FailedRequest
-import com.aura.project.rickandmortywiki.data.request.RepoRequest
-import com.aura.project.rickandmortywiki.data.request.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.FailedRequest
+import com.aura.project.rickandmortywiki.data.RepoRequest
+import com.aura.project.rickandmortywiki.data.SuccessfulRequest
 import com.aura.project.rickandmortywiki.data.room.character.CharDao
 
 class CharLocalRepo(private val charDao: CharDao) :
