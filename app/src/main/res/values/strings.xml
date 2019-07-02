@@ -5,4 +5,5 @@
     <string name="origin">Origin:</string>
     <string name="location">Location:</string>
     <string name="episodes">Episodes:</string>
+    <string name="underlined_text"><u>%s</u></string>
 </resources>

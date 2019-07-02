@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ClickableTextView" >
+        <item name="android:textColor">@color/linkText</item>
+    </style>
+
 </resources>

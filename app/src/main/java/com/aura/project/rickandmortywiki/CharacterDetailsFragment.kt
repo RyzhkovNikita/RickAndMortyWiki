@@ -32,7 +32,7 @@ class CharacterDetailsFragment : Fragment() {
         binding.detailsOrigin.text = origin
     }
     private val locationObserver = Observer<String> { location ->
-        binding.detailsNameText.text = location
+        binding.detailsLocation.text = location
     }
     private val imageObserver = Observer<String> { url ->
         ImageLoader
@@ -66,17 +66,27 @@ class CharacterDetailsFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * View model is partly binded, partly
+     * I've done by this way to try binding development's way
+     * View Model is being initialized separately from UI for better performance
+     */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(CharacterDetailsViewModel::class.java)
-        viewModel.setupWithCharacter(character)
+        val characterDetailsViewModelFactory = CharacterDetailsViewModelFactory(character)
+        viewModel = ViewModelProviders
+            .of(this, characterDetailsViewModelFactory)
+            .get(CharacterDetailsViewModel::class.java)
+        binding.cDviewModel = viewModel
+        binding.lifecycleOwner = this
         viewModel.apply {
-            name.observe(this@CharacterDetailsFragment, nameObserver)
+            setValuesByCharacter()
+            //name.observe(this@CharacterDetailsFragment, nameObserver)
             image.observe(this@CharacterDetailsFragment, imageObserver)
             gender.observe(this@CharacterDetailsFragment, genderObserver)
             isDead.observe(this@CharacterDetailsFragment, isDeadObserver)
-            origin.observe(this@CharacterDetailsFragment, originObserver)
-            location.observe(this@CharacterDetailsFragment, locationObserver)
+            //origin.observe(this@CharacterDetailsFragment, originObserver)
+            //location.observe(this@CharacterDetailsFragment, locationObserver)
         }
     }
 
