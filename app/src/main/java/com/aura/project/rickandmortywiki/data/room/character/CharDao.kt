@@ -8,10 +8,10 @@ import com.aura.project.rickandmortywiki.data.Character
 
 @Dao
 interface CharDao {
-    @Query("select * from character")
+    @Query("select * from character order by id")
     fun getAll(): List<Character>
 
-    @Query("select * from character where id between :id1 and :id2")
+    @Query("select * from character where id between :id1 and :id2 order by id")
     fun getBetween(id1: Int, id2: Int): List<Character>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -23,6 +23,6 @@ interface CharDao {
     @Query("select * from character where id=:charId")
     fun getById(charId: Int): List<Character>
 
-    @Query("select * from character where id in (:idList)")
+    @Query("select * from character where id in (:idList) order by id")
     fun getById(idList: IntArray): List<Character>
 }

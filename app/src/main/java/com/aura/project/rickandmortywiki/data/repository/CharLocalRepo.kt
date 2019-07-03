@@ -14,13 +14,12 @@ class CharLocalRepo(private val charDao: CharDao) :
     override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> {
         val charList = charDao.getBetween((page - 1) * _PAGE_SIZE + 1, page * _PAGE_SIZE)
         if (charList.size == _PAGE_SIZE) {
-            val result = charList.sortedBy { character -> character.id }
-            return SuccessfulRequest(body = result, source = SuccessfulRequest.FROM_LOCAL)
+            return SuccessfulRequest(body = charList, source = SuccessfulRequest.FROM_LOCAL)
         }
         return FailedRequest()
     }
 
-    override suspend fun insertChars(chars: List<Character>) {
+    override suspend fun insertChars(chars: List<Character>, pageNum: Int) {
         charDao.insertChars(chars)
     }
 

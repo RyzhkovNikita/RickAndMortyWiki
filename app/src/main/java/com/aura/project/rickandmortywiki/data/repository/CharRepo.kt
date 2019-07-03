@@ -16,17 +16,20 @@ class CharRepo(charDao: CharDao, charApi: ApiService) :
     override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> =
         withContext(Dispatchers.IO) {
             when (val netCharPage = netRepo.getCharPage(page)) {
-                is SuccessfulRequest -> netCharPage
+                is SuccessfulRequest -> {
+                    insertChars(netCharPage.body, page)
+                    netCharPage
+                }
 
                 is FailedRequest -> localRepo.getCharPage(page)
             }
         }
 
 
-    override suspend fun insertChars(chars: List<Character>) =
+    override suspend fun insertChars(chars: List<Character>, pageNum: Int) =
         withContext(Dispatchers.IO) {
-            localRepo.insertChars(chars)
-            netRepo.insertChars(chars)
+            localRepo.insertChars(chars, pageNum)
+            netRepo.insertChars(chars, pageNum)
         }
 
     override suspend fun clearAll() =
