@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.main_characters.AllCharFragment
 
-class MainActivity : AppCompatActivity(), Callback {
+class MainActivity : AppCompatActivity(), OnCharacterClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity(), Callback {
         savedInstanceState?: replace(AllCharFragment.newInstance())
     }
 
-    override fun onCharacterCardClicked(character: Character) {
+    override fun onCharacterCardClick(character: Character) {
         replace(CharacterDetailsFragment.getInstance(character), "detailChar ${character.id}")
     }
 

@@ -13,7 +13,7 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.databinding.CharacterDetailsFragmentBinding
 
 //TODO: try to do it at viewPager
-class CharacterDetailsFragment private constructor() : Fragment() {
+class CharacterDetailsFragment private constructor() : Fragment(), OnEpisodeClickListener {
 
     companion object {
         private var _INSTANCE: CharacterDetailsFragment? = null
@@ -64,6 +64,13 @@ class CharacterDetailsFragment private constructor() : Fragment() {
     private val locationObserver = Observer<String> { location ->
         _binding.detailsLocation.text = location
     }*/
+
+
+    override fun onEpisodeClick(episode: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
     private val imageObserver = Observer<String> { url ->
         ImageLoader
             .with(this.context!!)

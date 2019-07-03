@@ -13,12 +13,12 @@ import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.data.Character
 import kotlinx.coroutines.*
 
-class CharacterAdapter(fragment: AllCharFragment?) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
+class CharacterAdapter(fragment: AllCharFragment) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
-    private val PAGE_SIZE = 20
+    private val _PAGE_SIZE = 20
     private var _onCharClickListener: OnCharClickListener? = fragment
     private var _loader: CharacterLoader? = fragment
-    private val _context = fragment!!.context
+    private val _context = fragment.context
     private val _scope = CoroutineScope(Dispatchers.Main)
 
     var charList: List<Character> = ArrayList()
@@ -42,7 +42,7 @@ class CharacterAdapter(fragment: AllCharFragment?) : RecyclerView.Adapter<Charac
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         holder bindBy charList[position]
-        if (charList.size - position == PAGE_SIZE) _loader?.endReached()
+        if (charList.size - position == _PAGE_SIZE) _loader?.endReached()
     }
 
 

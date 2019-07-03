@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import com.aura.project.rickandmortywiki.Callback
+import com.aura.project.rickandmortywiki.OnCharacterClickListener
 import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.data.Character
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +20,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class AllCharFragment private constructor(): Fragment(), CharacterAdapter.OnCharClickListener,
     CharacterAdapter.CharacterLoader {
 
-    private var callback: Callback? = null
+    private var callback: OnCharacterClickListener? = null
 
     companion object {
         fun newInstance() = AllCharFragment()
@@ -44,7 +44,7 @@ class AllCharFragment private constructor(): Fragment(), CharacterAdapter.OnChar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        callback = context!! as Callback
+        callback = context!! as OnCharacterClickListener
     }
 
     override fun onCreateView(
@@ -70,7 +70,7 @@ class AllCharFragment private constructor(): Fragment(), CharacterAdapter.OnChar
     }
 
     override fun onCharClicked(character: Character) {
-        callback?.onCharacterCardClicked(character)
+        callback?.onCharacterCardClick(character)
     }
 
     override fun endReached() {
