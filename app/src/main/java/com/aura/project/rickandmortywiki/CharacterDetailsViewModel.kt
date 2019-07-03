@@ -5,12 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
 import com.aura.project.rickandmortywiki.data.Character
 
-class CharacterDetailsViewModel(var character: Character) : ViewModel() {
+class CharacterDetailsViewModel : ViewModel() {
 
-    /*init {
-        setValuesByCharacter()
-    }
-    */
+    private lateinit var character: Character
+
     private val _nameLiveData = MutableLiveData<String>()
     private val _isDeadLiveData = MutableLiveData<Boolean>()
     private val _locationLiveData = MutableLiveData<String>()
@@ -32,9 +30,13 @@ class CharacterDetailsViewModel(var character: Character) : ViewModel() {
         get() = _originLiveData
     val isDead: LiveData<Boolean>
         get() = _isDeadLiveData
-    
 
-    fun setValuesByCharacter() {
+    infix fun setupWith(character: Character) {
+        this.character = character
+        setValuesByCharacter()
+    }
+
+    private fun setValuesByCharacter() {
         _nameLiveData.value = character.name
         _isDeadLiveData.value = character.status == "Dead"
         _locationLiveData.value = character.location.name

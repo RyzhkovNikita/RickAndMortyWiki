@@ -8,7 +8,7 @@ import java.lang.IllegalArgumentException
 class CharacterDetailsViewModelFactory(val character: Character): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CharacterDetailsViewModel::class.java))
-            return CharacterDetailsViewModel(character) as T
+            return CharacterDetailsViewModel() as T
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

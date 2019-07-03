@@ -17,11 +17,13 @@ import com.aura.project.rickandmortywiki.data.Character
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
-class AllCharFragment(private var callback: Callback? = null) : Fragment(), CharacterAdapter.OnCharClickListener,
+class AllCharFragment private constructor(): Fragment(), CharacterAdapter.OnCharClickListener,
     CharacterAdapter.CharacterLoader {
 
+    private var callback: Callback? = null
+
     companion object {
-        fun newInstance(callback: Callback) = AllCharFragment(callback)
+        fun newInstance() = AllCharFragment()
     }
 
     private lateinit var _viewModel: AllCharViewModel
@@ -40,6 +42,10 @@ class AllCharFragment(private var callback: Callback? = null) : Fragment(), Char
         _errorBlock.visibility = if (shouldShowError) View.VISIBLE else View.GONE
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        callback = context!! as Callback
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,7 +76,6 @@ class AllCharFragment(private var callback: Callback? = null) : Fragment(), Char
     override fun endReached() {
         _viewModel.listEndReached()
     }
-
 
     @ExperimentalCoroutinesApi
     override fun onDestroy() {
