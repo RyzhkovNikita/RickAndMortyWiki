@@ -10,13 +10,6 @@ class CharacterDetailsViewModel : ViewModel() {
 
     private val _charLiveData = MutableLiveData<Character>()
 
-    private val _nameLiveData = MutableLiveData<String>()
-    private val _isDeadLiveData = MutableLiveData<Boolean>()
-    private val _locationLiveData = MutableLiveData<String>()
-    private val _originLiveData = MutableLiveData<String>()
-    private val _imageLiveData = MutableLiveData<String>()
-    private val _genderLiveData = MutableLiveData<String>()
-    private val _episodesLiveData = MutableLiveData<List<String>>()
     val name: LiveData<String> = Transformations.map(_charLiveData)
     { it.name }
 
