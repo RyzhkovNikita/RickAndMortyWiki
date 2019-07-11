@@ -2,12 +2,13 @@ package com.aura.project.rickandmortywiki
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel;
 import com.aura.project.rickandmortywiki.data.Character
 
 class CharacterDetailsViewModel : ViewModel() {
 
-    private lateinit var character: Character
+    private val _charLiveData = MutableLiveData<Character>()
 
     private val _nameLiveData = MutableLiveData<String>()
     private val _isDeadLiveData = MutableLiveData<Boolean>()
@@ -16,33 +17,29 @@ class CharacterDetailsViewModel : ViewModel() {
     private val _imageLiveData = MutableLiveData<String>()
     private val _genderLiveData = MutableLiveData<String>()
     private val _episodesLiveData = MutableLiveData<List<String>>()
-    val name: LiveData<String>
-        get() = _nameLiveData
-    val gender: LiveData<String>
-        get() = _genderLiveData
-    val location: LiveData<String>
-        get() = _locationLiveData
-    val episodes: LiveData<List<String>>
-        get() = _episodesLiveData
-    val image: LiveData<String>
-        get() = _imageLiveData
-    val origin: LiveData<String>
-        get() = _originLiveData
-    val isDead: LiveData<Boolean>
-        get() = _isDeadLiveData
+    val name: LiveData<String> = Transformations.map(_charLiveData)
+    { it.name }
+
+    val gender: LiveData<String> = Transformations.map(_charLiveData)
+    { it.gender }
+
+    val location: LiveData<String> = Transformations.map(_charLiveData)
+    { it.location.name }
+
+    val episodes: LiveData<List<String>> = Transformations.map(_charLiveData)
+    { it.episode }
+
+    val image: LiveData<String> = Transformations.map(_charLiveData)
+    { it.image }
+
+    val origin: LiveData<String> = Transformations.map(_charLiveData)
+    { it.origin.name }
+
+    val isDead: LiveData<Boolean> = Transformations.map(_charLiveData)
+    { it.status == "Dead" }
 
     infix fun setupWith(character: Character) {
-        this.character = character
-        setValuesByCharacter()
-    }
-
-    private fun setValuesByCharacter() {
-        _nameLiveData.value = character.name
-        _isDeadLiveData.value = character.status == "Dead"
-        _locationLiveData.value = character.location.name
-        _originLiveData.value = character.origin.name
-        _imageLiveData.value = character.image
-        _genderLiveData.value = character.gender
+        _charLiveData.value = character
     }
 
     fun locationClicked(){

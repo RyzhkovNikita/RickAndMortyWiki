@@ -21,6 +21,8 @@ class CharacterDetailsFragment private constructor() : Fragment(), OnEpisodeClic
             (_INSTANCE ?: CharacterDetailsFragment().also { _INSTANCE = it }).apply { _character = char }
     }
 
+    private val _layoutID = R.layout.character_details_fragment
+
     private lateinit var _binding: CharacterDetailsFragmentBinding
     private lateinit var _viewModel: CharacterDetailsViewModel
     private lateinit var _character: Character
@@ -29,7 +31,7 @@ class CharacterDetailsFragment private constructor() : Fragment(), OnEpisodeClic
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.character_details_fragment, container, false)
+        _binding = DataBindingUtil.inflate(inflater, _layoutID, container, false)
         return _binding.root
     }
 
