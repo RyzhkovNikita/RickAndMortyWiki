@@ -5,12 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 
-class EpisodeAdapter(fragment: CharacterDetailsFragment) : RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() {
+class EpisodeAdapter(fragment: Fragment) : RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() {
 
-    private val _onEpisodeClickListener: OnEpisodeClickListener = fragment
-    private val _context: Context? = fragment.context
+    private var _onEpisodeClickListener: OnEpisodeClickListener? = fragment as OnEpisodeClickListener
+    private var _context: Context? = fragment.context
 
     var list: List<String> = ArrayList()
         set(value) {
@@ -27,13 +28,22 @@ class EpisodeAdapter(fragment: CharacterDetailsFragment) : RecyclerView.Adapter<
 
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) = holder bindBy list[position]
 
+    interface OnEpisodeClickListener {
+        fun onEpisodeClick(episode: String)
+    }
+
+    fun onDestroy() {
+        _onEpisodeClickListener = null
+        _context = null
+    }
+
     inner class EpisodeViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         init {
             view.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
-            _onEpisodeClickListener.onEpisodeClick(list[adapterPosition])
+            _onEpisodeClickListener?.onEpisodeClick(list[adapterPosition])
         }
 
         private var name: TextView = itemView.findViewById(R.id.episode_item)

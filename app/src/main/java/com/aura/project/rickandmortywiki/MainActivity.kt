@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.aura.project.rickandmortywiki.data.Character
+import com.aura.project.rickandmortywiki.data.Location
+import com.aura.project.rickandmortywiki.data.Origin
 import com.aura.project.rickandmortywiki.main_characters.AllCharFragment
 
-class MainActivity : AppCompatActivity(), OnCharacterClickListener {
+class MainActivity : AppCompatActivity(), Router {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,8 +16,20 @@ class MainActivity : AppCompatActivity(), OnCharacterClickListener {
         savedInstanceState ?: addFragment(AllCharFragment.newInstance())
     }
 
-    override fun onCharacterCardClick(character: Character) {
+    override fun openCharacter(character: Character) {
         addFragment(CharacterDetailsFragment.getInstance(character), "detailChar ${character.id}")
+    }
+
+    override fun openLocation(location: Location) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun openOrigin(origin: Origin) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun openEpisode(episode: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     //TODO: navigation from jetpack

@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import com.aura.project.rickandmortywiki.OnCharacterClickListener
 import com.aura.project.rickandmortywiki.R
+import com.aura.project.rickandmortywiki.Router
 import com.aura.project.rickandmortywiki.data.Character
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -20,7 +20,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class AllCharFragment private constructor(): Fragment(), CharacterAdapter.OnCharClickListener,
     CharacterAdapter.CharacterLoader {
 
-    private var callback: OnCharacterClickListener? = null
+    private var router: Router? = null
 
     companion object {
         fun newInstance() = AllCharFragment()
@@ -44,7 +44,7 @@ class AllCharFragment private constructor(): Fragment(), CharacterAdapter.OnChar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        callback = context!! as OnCharacterClickListener
+        router = context!! as Router
     }
 
     override fun onCreateView(
@@ -64,13 +64,15 @@ class AllCharFragment private constructor(): Fragment(), CharacterAdapter.OnChar
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         _viewModel = ViewModelProviders.of(this).get(AllCharViewModel::class.java)
-        _viewModel.charList.observe(this, _pagedListObserver)
-        _viewModel.inProgress.observe(this, _progressBarObserver)
-        _viewModel.showingError.observe(this, _showErrorObserver)
+        _viewModel.apply {
+            charList.observe(this@AllCharFragment, _pagedListObserver)
+            inProgress.observe(this@AllCharFragment, _progressBarObserver)
+            showingError.observe(this@AllCharFragment, _showErrorObserver)
+        }
     }
 
     override fun onCharClicked(character: Character) {
-        callback?.onCharacterCardClick(character)
+        router?.openCharacter(character)
     }
 
     override fun endReached() {
@@ -80,7 +82,7 @@ class AllCharFragment private constructor(): Fragment(), CharacterAdapter.OnChar
     @ExperimentalCoroutinesApi
     override fun onDestroy() {
         _adapter.onDestroy()
-        callback = null
+        router = null
         super.onDestroy()
     }
 

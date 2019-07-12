@@ -13,7 +13,7 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.databinding.CharacterDetailsFragmentBinding
 
 //TODO: try to do it at viewPager
-class CharacterDetailsFragment private constructor() : Fragment(), OnEpisodeClickListener {
+class CharacterDetailsFragment private constructor() : Fragment(), EpisodeAdapter.OnEpisodeClickListener {
 
     companion object {
         private var _INSTANCE: CharacterDetailsFragment? = null
@@ -21,24 +21,33 @@ class CharacterDetailsFragment private constructor() : Fragment(), OnEpisodeClic
             (_INSTANCE ?: CharacterDetailsFragment().also { _INSTANCE = it }).apply { _character = char }
     }
 
+    private var _router: Router? = null
+
+    //fast access to layout
     private val _layoutID = R.layout.character_details_fragment
 
     private lateinit var _binding: CharacterDetailsFragmentBinding
     private lateinit var _viewModel: CharacterDetailsViewModel
     private lateinit var _character: Character
+    private lateinit var _adapter: EpisodeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, _layoutID, container, false)
+        _adapter = EpisodeAdapter(this)
+        _binding.detailsLocation.setOnClickListener { _router?.openLocation(_character.location) }
+        _binding.detailsOrigin.setOnClickListener { _router?.openOrigin(_character.origin) }
+        _router = activity as Router
         return _binding.root
     }
 
     /**
-     * View model is partly binded, partly
-     * I've done by this way to try _binding development's way
-     * View Model is being initialized separately from UI for better performance
+     * View model is binded partly, observed partly
+     * I've done by this way to try binding development's way
+     * I usually observe the whole viewModel
+     * View Model is being initialized separately from UI for better readability
      */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -52,26 +61,18 @@ class CharacterDetailsFragment private constructor() : Fragment(), OnEpisodeClic
             image.observe(this@CharacterDetailsFragment, imageObserver)
             gender.observe(this@CharacterDetailsFragment, genderObserver)
             isDead.observe(this@CharacterDetailsFragment, isDeadObserver)
-            //name.observe(this@CharacterDetailsFragment, nameObserver)
-            //origin.observe(this@CharacterDetailsFragment, originObserver)
-            //location.observe(this@CharacterDetailsFragment, locationObserver)
+            episodes.observe(this@CharacterDetailsFragment, episodesObserver)
         }
     }
-   /* private val nameObserver = Observer<String> { name ->
-        _binding.detailsNameText.text = name
-    }
-    private val originObserver = Observer<String> { origin ->
-        _binding.detailsOrigin.text = origin
-    }
-    private val locationObserver = Observer<String> { location ->
-        _binding.detailsLocation.text = location
-    }*/
 
 
     override fun onEpisodeClick(episode: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        _router?.openEpisode(episode)
     }
 
+    private val episodesObserver = Observer<List<String>> { episodes ->
+        _adapter.list = episodes
+    }
 
     private val imageObserver = Observer<String> { url ->
         ImageLoader
@@ -98,4 +99,8 @@ class CharacterDetailsFragment private constructor() : Fragment(), OnEpisodeClic
         _binding.detailsDeadImage.visibility = if (isDead) View.VISIBLE else View.GONE
     }
 
+    override fun onDestroy() {
+        _adapter.onDestroy()
+        super.onDestroy()
+    }
 }

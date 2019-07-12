@@ -34,13 +34,4 @@ class CharacterDetailsViewModel : ViewModel() {
     infix fun setupWith(character: Character) {
         _charLiveData.value = character
     }
-
-    fun locationClicked(){
-        TODO("implement")
-    }
-
-    fun originClicked(){
-        TODO("implement")
-    }
-
 }
