@@ -30,9 +30,7 @@ abstract class AppDatabase : RoomDatabase() {
         private val LOCK = Any()
 
         fun getInstance(context: Context) = instance
-            ?: synchronized(
-                LOCK
-        ) {
+            ?: synchronized(LOCK) {
             instance
                 ?: buildDatabase(context).also { instance = it }
         }

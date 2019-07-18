@@ -16,6 +16,8 @@
                 android:layout_height="wrap_content"
                 tools:listitem="@layout/character_card"
                 tools:itemCount="10"
+                android:padding="8dp"
+                android:clipToPadding="true"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="3"/>
         <ProgressBar

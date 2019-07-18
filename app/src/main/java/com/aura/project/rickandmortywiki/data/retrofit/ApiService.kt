@@ -2,6 +2,7 @@ package com.aura.project.rickandmortywiki.data.retrofit
 
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.CharacterPage
+import com.aura.project.rickandmortywiki.data.Episode
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -20,6 +21,9 @@ interface ApiService {
 
     @GET("character/{ids}")
     fun getCharsById(@Path("ids") list: String): Call<List<Character>>
+
+    @GET("episode/{id}")
+    fun getEpisode(@Path("id") id: Int): Call<Episode>
 
     companion object {
         @Volatile

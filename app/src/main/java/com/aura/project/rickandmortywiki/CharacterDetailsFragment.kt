@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.aura.project.rickandmortywiki.data.Character
+import com.aura.project.rickandmortywiki.data.Episode
 import com.aura.project.rickandmortywiki.databinding.CharacterDetailsFragmentBinding
 
 //TODO: try to do it at viewPager
@@ -37,6 +38,7 @@ class CharacterDetailsFragment private constructor() : Fragment(), EpisodeAdapte
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, _layoutID, container, false)
         _adapter = EpisodeAdapter(this)
+        _binding.episodes.adapter = _adapter
         _binding.detailsLocation.setOnClickListener { _router?.openLocation(_character.location) }
         _binding.detailsOrigin.setOnClickListener { _router?.openOrigin(_character.origin) }
         _router = activity as Router
@@ -47,7 +49,7 @@ class CharacterDetailsFragment private constructor() : Fragment(), EpisodeAdapte
      * View model is binded partly, observed partly
      * I've done by this way to try binding development's way
      * I usually observe the whole viewModel
-     * View Model is being initialized separately from UI for better readability
+     * View Model is being initialized separately from views for better readability
      */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -70,8 +72,8 @@ class CharacterDetailsFragment private constructor() : Fragment(), EpisodeAdapte
         _router?.openEpisode(episode)
     }
 
-    private val episodesObserver = Observer<List<String>> { episodes ->
-        _adapter.list = episodes
+    private val episodesObserver = Observer<List<Episode>> { episodes ->
+        _adapter.list = episodes.map { "${it.seasonAndNum} ${it.title}" }
     }
 
     private val imageObserver = Observer<String> { url ->

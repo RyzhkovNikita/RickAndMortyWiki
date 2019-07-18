@@ -42,3 +42,17 @@ data class Info(
     val pages: Int,
     val prev: String
 )
+
+data class Episode(
+    val id: Int,
+    @SerializedName("name")
+    val title: String,
+    @SerializedName("air_date")
+    val date: String,
+    @SerializedName("episode")
+    val seasonAndNum: String,
+    @SerializedName("characters")
+    val characterUrls: List<String>,
+    val url: String,
+    val created: String
+)
