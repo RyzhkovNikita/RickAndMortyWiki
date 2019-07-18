@@ -137,8 +137,7 @@
                 tools:listitem="@layout/episode_item"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/details_episodes_title"
-                app:layout_constraintHorizontal_bias="0.5"
-                android:layout_marginBottom="8dp"/>
+                app:layout_constraintHorizontal_bias="0.5"/>
         <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
                 android:layout_width="wrap_content"
