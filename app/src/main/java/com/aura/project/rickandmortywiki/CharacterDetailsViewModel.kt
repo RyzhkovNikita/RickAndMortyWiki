@@ -8,9 +8,13 @@ import com.aura.project.rickandmortywiki.data.repository.EpisodeRepo
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import kotlinx.coroutines.launch
 
-class CharacterDetailsViewModel : ViewModel() {
+class CharacterDetailsViewModel(var character: Character) : ViewModel() {
 
-    private val _charLiveData = MutableLiveData<Character>()
+    init {
+        loadEpisodes(character.episode)
+    }
+
+    private val _charLiveData = MutableLiveData<Character>().apply { value = character }
     private val _episodes = MutableLiveData<List<Episode>>()
     private val _episodeRepo = EpisodeRepo(ApiService.getInstance())
 
@@ -35,10 +39,6 @@ class CharacterDetailsViewModel : ViewModel() {
     val isDead: LiveData<Boolean> = Transformations.map(_charLiveData)
     { it.status == "Dead" }
 
-    infix fun setupWith(character: Character) {
-        _charLiveData.value = character
-        loadEpisodes(character.episode)
-    }
 
     private fun loadEpisodes(episodeUrls: List<String>) = viewModelScope.launch {
         val episodes = _episodeRepo.getEpisodesFromUrls(episodeUrls)
@@ -52,5 +52,13 @@ class CharacterDetailsViewModel : ViewModel() {
 
     fun locationClicked() {
 
+    }
+
+    class Factory(val character: Character) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(CharacterDetailsViewModel::class.java))
+                return CharacterDetailsViewModel(character) as T
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
     }
 }

@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="CDviewModel"
+        <variable name="viewModel"
                   type="com.aura.project.rickandmortywiki.CharacterDetailsViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,25 +25,29 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintBottom_toTopOf="@+id/details_name_text"
                 android:layout_marginTop="40dp"
+                app:imageURL="@{viewModel.image}"
                 app:layout_constraintTop_toTopOf="parent"/>
         <ImageView
-                android:layout_width="130dp"
-                android:layout_height="130dp"
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:rotation="30"
+                android:background="@color/light_background"
                 app:srcCompat="@drawable/dead_stamp"
                 android:id="@+id/details_dead_image"
-                android:layout_marginStart="184dp"
+                android:layout_marginStart="152dp"
                 app:layout_constraintStart_toStartOf="@+id/details_avatar_image"
-                android:layout_marginBottom="184dp"
+                android:layout_marginBottom="216dp"
                 app:layout_constraintBottom_toBottomOf="@+id/details_avatar_image"
                 android:labelFor="@id/details_avatar_image"
                 android:elevation="1dp"
+                app:TFvisibility="@{viewModel.isDead}"
         />
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/details_name_text"
                 app:layout_constraintTop_toBottomOf="@+id/details_avatar_image"
-                android:text="@{CDviewModel.name}"
+                android:text="@{viewModel.name}"
                 tools:text="Rick Sanchez"
                 android:textSize="32sp"
                 android:textAlignment="center"
@@ -53,6 +57,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:drawablePadding="2dp"
                 app:layout_constraintHorizontal_bias="0.5"
+                app:gender="@{viewModel.gender}"
                 app:layout_constraintBottom_toTopOf="@+id/details_origin_title"/>
         <TextView
                 android:text="@string/origin"
@@ -81,7 +86,7 @@
                 tools:text="Ricks Citadel"
                 style="@style/ClickableTextView"
                 android:textSize="20sp"
-                android:text="@{@string/underlined_text(CDviewModel.origin)}"
+                android:text="@{@string/underlined_text(viewModel.origin)}"
                 android:layout_width="0dp"
                 android:textAlignment="center"
                 android:layout_height="wrap_content"
@@ -94,11 +99,11 @@
                 android:layout_marginEnd="8dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="@{()->CDviewModel.originClicked()}"/>
+                android:onClick="@{()->viewModel.originClicked()}"/>
         <TextView
                 tools:text="Earth"
                 style="@style/ClickableTextView"
-                android:text="@{@string/underlined_text(CDviewModel.location)}"
+                android:text="@{@string/underlined_text(viewModel.location)}"
                 android:textSize="20sp"
                 android:textAlignment="center"
                 android:layout_width="0dp"
@@ -109,7 +114,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                android:onClick="@{()->CDviewModel.locationClicked()}"/>
+                android:onClick="@{()->viewModel.locationClicked()}"/>
         <TextView
                 android:text="@string/episodes"
                 android:textSize="24sp"

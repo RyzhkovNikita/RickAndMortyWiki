@@ -25,6 +25,9 @@ interface ApiService {
     @GET("episode/{id}")
     fun getEpisode(@Path("id") id: Int): Call<Episode>
 
+    @GET("episode/{ids}")
+    fun getEpisodes(@Path("ids") ids: String): Call<List<Episode>>
+
     companion object {
         @Volatile
         private var instance: ApiService? = null
