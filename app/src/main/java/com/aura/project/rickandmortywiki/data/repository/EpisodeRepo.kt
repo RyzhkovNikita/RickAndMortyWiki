@@ -19,10 +19,10 @@ class EpisodeRepo(private val apiService: ApiService) : EpisodeDataSource {
             try {
                 val response = apiService.getEpisodes(episodeIds).execute()
                 if (response.isSuccessful)
-                    SuccessfulRequest(response.body()!!, SuccessfulRequest.FROM_NET)
+                    return@withContext SuccessfulRequest(response.body()!!, SuccessfulRequest.FROM_NET)
             } catch (e: Exception) {
-                FailedRequest<List<Episode>>()
+                return@withContext FailedRequest<List<Episode>>()
             }
-            FailedRequest<List<Episode>>()
+            return@withContext FailedRequest<List<Episode>>()
         }
 }

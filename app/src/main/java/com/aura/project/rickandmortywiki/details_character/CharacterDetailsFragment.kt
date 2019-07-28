@@ -42,6 +42,7 @@ class CharacterDetailsFragment private constructor() : Fragment(),
         _binding = DataBindingUtil.inflate(inflater, _layoutID, container, false)
         _adapter = EpisodeAdapter(this)
         _binding.episodes.adapter = _adapter
+        _binding.episodes.isNestedScrollingEnabled = false
         _binding.detailsLocation.setOnClickListener { _router?.openLocation(_character.location) }
         _binding.detailsOrigin.setOnClickListener { _router?.openOrigin(_character.origin) }
         _router = activity as Router
