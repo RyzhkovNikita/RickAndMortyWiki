@@ -16,10 +16,13 @@ class EpisodeRepo(private val apiService: ApiService) : EpisodeDataSource {
                 .map { url -> url.substringAfter(scheme, "") }
                 .filter { idString -> idString.isNotEmpty() }
                 .reduce{acc, id -> "$acc, $id"}
-            val response = apiService.getEpisodes(episodeIds).execute()
-            if (response.isSuccessful)
-                SuccessfulRequest(response.body()!!, SuccessfulRequest.FROM_NET)
-            else
+            try {
+                val response = apiService.getEpisodes(episodeIds).execute()
+                if (response.isSuccessful)
+                    SuccessfulRequest(response.body()!!, SuccessfulRequest.FROM_NET)
+            } catch (e: Exception) {
                 FailedRequest<List<Episode>>()
+            }
+            FailedRequest<List<Episode>>()
         }
 }

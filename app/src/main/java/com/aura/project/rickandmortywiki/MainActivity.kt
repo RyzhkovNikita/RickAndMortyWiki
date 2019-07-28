@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.Location
 import com.aura.project.rickandmortywiki.data.Origin
+import com.aura.project.rickandmortywiki.details_character.CharacterDetailsFragment
 import com.aura.project.rickandmortywiki.main_characters.AllCharFragment
 
 class MainActivity : AppCompatActivity(), Router {
@@ -21,15 +22,15 @@ class MainActivity : AppCompatActivity(), Router {
     }
 
     override fun openLocation(location: Location) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun openOrigin(origin: Origin) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun openEpisode(episode: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     //TODO: navigation from jetpack

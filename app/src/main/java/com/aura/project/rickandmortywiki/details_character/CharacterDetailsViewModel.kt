@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki
+package com.aura.project.rickandmortywiki.details_character
 
 import androidx.lifecycle.*
 import com.aura.project.rickandmortywiki.data.Character

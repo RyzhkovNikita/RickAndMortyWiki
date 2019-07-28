@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki
+package com.aura.project.rickandmortywiki.details_character
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,17 +8,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.aura.project.rickandmortywiki.R
+import com.aura.project.rickandmortywiki.Router
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.Episode
 import com.aura.project.rickandmortywiki.databinding.CharacterDetailsFragmentBinding
 
 //TODO: try to do it at viewPager
-class CharacterDetailsFragment private constructor() : Fragment(), EpisodeAdapter.OnEpisodeClickListener {
+class CharacterDetailsFragment private constructor() : Fragment(),
+    EpisodeAdapter.OnEpisodeClickListener {
 
     companion object {
         private var _INSTANCE: CharacterDetailsFragment? = null
         fun getInstance(char: Character): CharacterDetailsFragment =
-            (_INSTANCE ?: CharacterDetailsFragment().also { _INSTANCE = it }).apply { _character = char }
+            (_INSTANCE
+                ?: CharacterDetailsFragment().also { _INSTANCE = it }).apply { _character = char }
     }
 
     private var _router: Router? = null
