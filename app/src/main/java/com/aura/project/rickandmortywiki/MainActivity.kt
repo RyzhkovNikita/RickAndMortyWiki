@@ -17,8 +17,8 @@ class MainActivity : AppCompatActivity(), Router {
         savedInstanceState ?: addFragment(AllCharFragment.newInstance())
     }
 
-    override fun openCharacter(character: Character) {
-        addFragment(CharacterDetailsFragment.getInstance(character), "detailChar ${character.id}")
+    override fun openCharacter(charId: Long) {
+        addFragment(CharacterDetailsFragment.getInstance(charId), "detailChar ${charId}")
     }
 
     override fun openLocation(location: Location) {

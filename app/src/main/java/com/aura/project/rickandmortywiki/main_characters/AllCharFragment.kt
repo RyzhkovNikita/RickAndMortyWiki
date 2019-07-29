@@ -72,7 +72,7 @@ class AllCharFragment private constructor(): Fragment(), CharacterAdapter.OnChar
     }
 
     override fun onCharClicked(character: Character) {
-        router?.openCharacter(character)
+        router?.openCharacter(character.id)
     }
 
     override fun endReached() {

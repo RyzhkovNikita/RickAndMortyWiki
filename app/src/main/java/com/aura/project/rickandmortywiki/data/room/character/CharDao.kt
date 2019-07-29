@@ -21,8 +21,8 @@ interface CharDao {
     fun clearAll()
 
     @Query("select * from character where id=:charId")
-    fun getById(charId: Int): List<Character>
+    fun getById(charId: Long): List<Character>
 
     @Query("select * from character where id in (:idList) order by id")
-    fun getById(idList: IntArray): List<Character>
+    fun getById(idList: LongArray): List<Character>
 }

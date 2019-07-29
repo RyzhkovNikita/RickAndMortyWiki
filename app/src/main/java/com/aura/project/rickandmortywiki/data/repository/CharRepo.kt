@@ -21,7 +21,7 @@ class CharRepo(private val netRepo: CharNetRepo, private val localRepo: CharLoca
                         insertChars(net.body)
                         net
                     } else
-                        FailedRequest()
+                        FailedRequest<List<Character>>()
                 }
             }
         }
@@ -39,7 +39,7 @@ class CharRepo(private val netRepo: CharNetRepo, private val localRepo: CharLoca
             netRepo.clearAll()
         }
 
-    override suspend fun getChar(id: Int): RepoRequest<Character> =
+    override suspend fun getChar(id: Long): RepoRequest<Character> =
         withContext(Dispatchers.IO) {
             when (val local = localRepo.getChar(id)) {
                 is SuccessfulRequest -> local
@@ -47,7 +47,7 @@ class CharRepo(private val netRepo: CharNetRepo, private val localRepo: CharLoca
             }
         }
 
-    override suspend fun getChars(ids: IntArray): RepoRequest<List<Character>> =
+    override suspend fun getChars(ids: LongArray): RepoRequest<List<Character>> =
         withContext(Dispatchers.IO) {
             when (val local = localRepo.getChars(ids)) {
                 is SuccessfulRequest -> local

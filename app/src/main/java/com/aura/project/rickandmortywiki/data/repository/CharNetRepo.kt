@@ -29,7 +29,7 @@ class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
 
     override suspend fun clearAll() {}
 
-    override suspend fun getChars(ids: IntArray): RepoRequest<List<Character>> {
+    override suspend fun getChars(ids: LongArray): RepoRequest<List<Character>> {
         val requestPath = ids.joinToString(separator = ",", transform = { it.toString() })
         val response = charApi.getCharsById(requestPath).execute()
         if (response.isSuccessful)
@@ -38,7 +38,7 @@ class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
     }
 
 
-    override suspend fun getChar(id: Int): RepoRequest<Character> {
+    override suspend fun getChar(id: Long): RepoRequest<Character> {
         val response = charApi.getCharById(id).execute()
         if (response.isSuccessful)
             return SuccessfulRequest(body = response.body()!!, source = SuccessfulRequest.FROM_NET)

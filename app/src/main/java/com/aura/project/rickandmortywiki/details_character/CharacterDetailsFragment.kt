@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,15 +20,15 @@ class CharacterDetailsFragment private constructor() : Fragment(),
     EpisodeAdapter.OnEpisodeClickListener {
 
     companion object {
-        private var _INSTANCE: CharacterDetailsFragment? = null
-        fun getInstance(char: Character): CharacterDetailsFragment =
-            (_INSTANCE
-                ?: CharacterDetailsFragment().also { _INSTANCE = it }).apply { _character = char }
+        private const val CHAR_ID_KEY = "charIdKey"
+        fun getInstance(id: Long): CharacterDetailsFragment =
+            CharacterDetailsFragment().apply {
+                arguments = bundleOf(CHAR_ID_KEY to id)
+            }
     }
 
     private var _router: Router? = null
 
-    //fast access to layout
     private val _layoutID = R.layout.character_details_fragment
 
     private lateinit var _binding: CharacterDetailsFragmentBinding
@@ -51,7 +52,8 @@ class CharacterDetailsFragment private constructor() : Fragment(),
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val factory = CharacterDetailsViewModel.Factory(_character)
+        val id = arguments!!.getLong(CHAR_ID_KEY)
+        val factory = CharacterDetailsViewModel.Factory(id, activity!!.application)
         _viewModel = ViewModelProviders.of(this, factory).get(CharacterDetailsViewModel::class.java)
         _binding.viewModel = _viewModel
         _binding.lifecycleOwner = this

@@ -15,7 +15,7 @@ data class Character(
     var created: String,
     var episode: List<String>,
     var gender: String,
-    @PrimaryKey val id: Int,
+    @PrimaryKey val id: Long,
     var image: String,
     var location: Location,
     var name: String,

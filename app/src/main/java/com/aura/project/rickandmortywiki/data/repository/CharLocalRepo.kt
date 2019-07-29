@@ -27,14 +27,14 @@ class CharLocalRepo(private val charDao: CharDao) :
         charDao.clearAll()
     }
 
-    override suspend fun getChar(id: Int): RepoRequest<Character> {
+    override suspend fun getChar(id: Long): RepoRequest<Character> {
         val char = charDao.getById(id)
         if (char.isNotEmpty())
             return SuccessfulRequest(body = char[0], source = SuccessfulRequest.FROM_LOCAL)
         return FailedRequest()
     }
 
-    override suspend fun getChars(ids: IntArray): RepoRequest<List<Character>> =
+    override suspend fun getChars(ids: LongArray): RepoRequest<List<Character>> =
         SuccessfulRequest(
             body = charDao.getById(ids).sortedBy { character -> character.id }
             , source = SuccessfulRequest.FROM_LOCAL
