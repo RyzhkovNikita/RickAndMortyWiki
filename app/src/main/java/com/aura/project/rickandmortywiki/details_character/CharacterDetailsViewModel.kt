@@ -16,6 +16,8 @@ import kotlinx.coroutines.launch
 
 class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewModel(app) {
 
+    private val _loading = MutableLiveData<Boolean>()
+    private val _error = MutableLiveData<Boolean>()
     private val _charLiveData = MutableLiveData<Character>()
     private val _episodes = MutableLiveData<List<Episode>>()
     private val _episodeRepo = EpisodeRepo(ApiService.getInstance())
@@ -27,6 +29,12 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
             AppDatabase.getInstance(getApplication()).charDao()
         )
     )
+
+    val loading: LiveData<Boolean>
+        get() = _loading
+
+    val error: LiveData<Boolean>
+        get() = _error
 
     val name: LiveData<String> = Transformations.map(_charLiveData)
     { it.name }
@@ -54,15 +62,18 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
     }
 
     private fun loadCharacter() = viewModelScope.launch {
+        _loading.value = true
+        _error.value = false
         when (val request = _charRepo.getChar(id)){
             is SuccessfulRequest -> {
                 _charLiveData.value = request.body
                 loadEpisodes(request.body.episode)
             }
             is FailedRequest -> {
-                //TODO: show error
+                _error.value = true
             }
         }
+        _loading.value = false
     }
 
     private fun loadEpisodes(episodeUrls: List<String>) = viewModelScope.launch {
@@ -78,6 +89,10 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
 
     fun locationClicked() {
 
+    }
+
+    fun errorButtonClicked() {
+        loadCharacter()
     }
 
     class Factory(val id: Long, val app: Application) : ViewModelProvider.Factory {

@@ -14,11 +14,11 @@ class MainActivity : AppCompatActivity(), Router {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        savedInstanceState ?: addFragment(AllCharFragment.newInstance())
+        savedInstanceState ?: openFragment(AllCharFragment.newInstance())
     }
 
     override fun openCharacter(charId: Long) {
-        addFragment(CharacterDetailsFragment.getInstance(charId), "detailChar ${charId}")
+        openFragment(CharacterDetailsFragment.getInstance(charId), "detailChar $charId")
     }
 
     override fun openLocation(location: Location) {
@@ -33,13 +33,12 @@ class MainActivity : AppCompatActivity(), Router {
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    //TODO: navigation from jetpack
-    private fun addFragment(fragment: Fragment, tag: String = "") {
+    private fun openFragment(fragment: Fragment, tag: String = "") {
         val transaction = supportFragmentManager.beginTransaction()
 
         if (tag.isNotEmpty()) {
             transaction
-                .add(R.id.main_frame, fragment)
+                .replace(R.id.main_frame, fragment)
                 .addToBackStack(tag)
         } else
             transaction.replace(R.id.main_frame, fragment)

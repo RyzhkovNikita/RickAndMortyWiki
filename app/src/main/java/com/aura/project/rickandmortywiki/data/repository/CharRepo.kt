@@ -9,6 +9,9 @@ import kotlinx.coroutines.withContext
 
 class CharRepo(private val netRepo: CharNetRepo, private val localRepo: CharLocalRepo) :
     CharacterDataSource {
+
+    //TODO: write lastPageNumber to SharedPref, make class to deal with sharedPref
+
     override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> =
         withContext(Dispatchers.IO) {
             when (val local = localRepo.getCharPage(page)) {

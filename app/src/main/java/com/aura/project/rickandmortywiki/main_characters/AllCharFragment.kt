@@ -65,9 +65,9 @@ class AllCharFragment private constructor(): Fragment(), CharacterAdapter.OnChar
         super.onActivityCreated(savedInstanceState)
         _viewModel = ViewModelProviders.of(this).get(AllCharViewModel::class.java)
         _viewModel.apply {
-            charList.observe(this@AllCharFragment, _pagedListObserver)
-            inProgress.observe(this@AllCharFragment, _progressBarObserver)
-            showingError.observe(this@AllCharFragment, _showErrorObserver)
+            charList.observe(viewLifecycleOwner, _pagedListObserver)
+            inProgress.observe(viewLifecycleOwner, _progressBarObserver)
+            showingError.observe(viewLifecycleOwner, _showErrorObserver)
         }
     }
 

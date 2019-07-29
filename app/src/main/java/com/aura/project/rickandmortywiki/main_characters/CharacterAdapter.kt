@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aura.project.rickandmortywiki.CharDiffCallback
@@ -13,11 +14,11 @@ import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.data.Character
 import kotlinx.coroutines.*
 
-class CharacterAdapter(fragment: AllCharFragment) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
+class CharacterAdapter(fragment: Fragment) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
     private val _PAGE_SIZE = 20
-    private var _onCharClickListener: OnCharClickListener? = fragment
-    private var _loader: CharacterLoader? = fragment
+    private var _onCharClickListener: OnCharClickListener? = fragment as OnCharClickListener
+    private var _loader: CharacterLoader? = fragment as CharacterLoader
     private val _context = fragment.context
     private val _scope = CoroutineScope(Dispatchers.Main)
 

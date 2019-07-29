@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ProgressBar
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,8 +16,8 @@ import com.aura.project.rickandmortywiki.Router
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.Episode
 import com.aura.project.rickandmortywiki.databinding.CharacterDetailsFragmentBinding
+import kotlinx.android.synthetic.main.error_layout.*
 
-//TODO: try to do it at viewPager
 class CharacterDetailsFragment private constructor() : Fragment(),
     EpisodeAdapter.OnEpisodeClickListener {
 
@@ -42,10 +44,13 @@ class CharacterDetailsFragment private constructor() : Fragment(),
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, _layoutID, container, false)
         _adapter = EpisodeAdapter(this)
-        _binding.episodes.adapter = _adapter
-        _binding.episodes.isNestedScrollingEnabled = false
-        _binding.detailsLocation.setOnClickListener { _router?.openLocation(_character.location) }
-        _binding.detailsOrigin.setOnClickListener { _router?.openOrigin(_character.origin) }
+        _binding.apply {
+            episodes.adapter = _adapter
+            episodes.isNestedScrollingEnabled = false
+            detailsLocation.setOnClickListener { _router?.openLocation(_character.location) }
+            detailsOrigin.setOnClickListener { _router?.openOrigin(_character.origin) }
+            error.findViewById<Button>(R.id.error_button).setOnClickListener { viewModel?.errorButtonClicked() }
+        }
         _router = activity as Router
         return _binding.root
     }
@@ -58,10 +63,9 @@ class CharacterDetailsFragment private constructor() : Fragment(),
         _binding.viewModel = _viewModel
         _binding.lifecycleOwner = this
         _viewModel.apply {
-            episodes.observe(this@CharacterDetailsFragment, episodesObserver)
+            episodes.observe(viewLifecycleOwner, episodesObserver)
         }
     }
-
 
     override fun onEpisodeClick(episode: String) {
         _router?.openEpisode(episode)
@@ -69,10 +73,5 @@ class CharacterDetailsFragment private constructor() : Fragment(),
 
     private val episodesObserver = Observer<List<Episode>> { episodes ->
         _adapter.list = episodes.map { "${it.seasonAndNum} ${it.title}" }
-    }
-
-    override fun onDestroy() {
-        _adapter.onDestroy()
-        super.onDestroy()
     }
 }

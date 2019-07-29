@@ -23,12 +23,14 @@
         <ProgressBar
                 android:id="@+id/all_char_progress"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:visibility="gone"
                 tools:visibility="visible"
         />
         <include android:id="@+id/all_char_error"
-                layout="@layout/error_layout"/>
+                 android:layout_height="50dp"
+                 android:layout_width="match_parent"
+                 layout="@layout/error_layout"/>
 
     </LinearLayout>
 
