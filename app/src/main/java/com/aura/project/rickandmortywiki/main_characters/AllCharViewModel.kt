@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.repository.CharLocalRepo
+import com.aura.project.rickandmortywiki.data.repository.CharNetRepo
 import com.aura.project.rickandmortywiki.data.repository.CharRepo
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
@@ -27,8 +29,12 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
         get() = _showingError
 
     private val _charRepo = CharRepo(
-        AppDatabase.getInstance(getApplication()).charDao(),
-        ApiService.getInstance()
+        CharNetRepo(
+            ApiService.getInstance()
+        ),
+        CharLocalRepo(
+            AppDatabase.getInstance(getApplication()).charDao()
+        )
     )
 
     init {

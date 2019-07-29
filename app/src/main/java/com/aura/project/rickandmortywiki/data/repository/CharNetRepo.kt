@@ -24,8 +24,7 @@ class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
         return FailedRequest()
     }
 
-    override suspend fun insertChars(chars: List<Character>, pageNum: Int) {
-        _cache.put(pageNum, chars)
+    override suspend fun insertChars(chars: List<Character>) {
     }
 
     override suspend fun clearAll() {}

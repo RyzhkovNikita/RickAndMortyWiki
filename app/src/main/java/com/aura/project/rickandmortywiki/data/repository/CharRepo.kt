@@ -4,32 +4,33 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
-import com.aura.project.rickandmortywiki.data.retrofit.ApiService
-import com.aura.project.rickandmortywiki.data.room.character.CharDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CharRepo(charDao: CharDao, charApi: ApiService) :
+class CharRepo(private val netRepo: CharNetRepo, private val localRepo: CharLocalRepo) :
     CharacterDataSource {
-    private val netRepo = CharNetRepo(charApi)
-    private val localRepo = CharLocalRepo(charDao)
     override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> =
         withContext(Dispatchers.IO) {
-            when (val netCharPage = netRepo.getCharPage(page)) {
+            when (val local = localRepo.getCharPage(page)) {
                 is SuccessfulRequest -> {
-                    insertChars(netCharPage.body, page)
-                    netCharPage
+                    local
                 }
-
-                is FailedRequest -> localRepo.getCharPage(page)
+                is FailedRequest -> {
+                    val net = netRepo.getCharPage(page)
+                    if (net is SuccessfulRequest) {
+                        insertChars(net.body)
+                        net
+                    } else
+                        FailedRequest()
+                }
             }
         }
 
 
-    override suspend fun insertChars(chars: List<Character>, pageNum: Int) =
+    override suspend fun insertChars(chars: List<Character>) =
         withContext(Dispatchers.IO) {
-            localRepo.insertChars(chars, pageNum)
-            netRepo.insertChars(chars, pageNum)
+            localRepo.insertChars(chars)
+            netRepo.insertChars(chars)
         }
 
     override suspend fun clearAll() =
@@ -40,19 +41,17 @@ class CharRepo(charDao: CharDao, charApi: ApiService) :
 
     override suspend fun getChar(id: Int): RepoRequest<Character> =
         withContext(Dispatchers.IO) {
-            when (val netResult = netRepo.getChar(id)) {
-                is SuccessfulRequest -> netResult
-
-                is FailedRequest -> localRepo.getChar(id)
+            when (val local = localRepo.getChar(id)) {
+                is SuccessfulRequest -> local
+                is FailedRequest -> netRepo.getChar(id)
             }
         }
 
     override suspend fun getChars(ids: IntArray): RepoRequest<List<Character>> =
         withContext(Dispatchers.IO) {
-            when (val netResult = netRepo.getChars(ids)) {
-                is SuccessfulRequest -> netResult
-
-                is FailedRequest -> localRepo.getChars(ids)
+            when (val local = localRepo.getChars(ids)) {
+                is SuccessfulRequest -> local
+                is FailedRequest -> netRepo.getChars(ids)
             }
         }
 }

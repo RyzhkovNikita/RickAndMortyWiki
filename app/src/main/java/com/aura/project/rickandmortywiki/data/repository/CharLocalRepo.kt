@@ -19,7 +19,7 @@ class CharLocalRepo(private val charDao: CharDao) :
         return FailedRequest()
     }
 
-    override suspend fun insertChars(chars: List<Character>, pageNum: Int) {
+    override suspend fun insertChars(chars: List<Character>) {
         charDao.insertChars(chars)
     }
 
