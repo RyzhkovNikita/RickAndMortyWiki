@@ -11,6 +11,7 @@ import com.aura.project.rickandmortywiki.data.SuccessfulRequest
 import com.aura.project.rickandmortywiki.data.repository.CharLocalRepo
 import com.aura.project.rickandmortywiki.data.repository.CharNetRepo
 import com.aura.project.rickandmortywiki.data.repository.CharRepo
+import com.aura.project.rickandmortywiki.data.repository.CharacterDataSource
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
     val showingError: LiveData<Boolean>
         get() = _showingError
 
-    private val _charRepo = CharRepo(
+    private val _charRepo: CharacterDataSource = CharRepo(
         CharNetRepo(
             ApiService.getInstance()
         ),

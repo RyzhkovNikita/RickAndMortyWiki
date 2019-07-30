@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ProgressBar
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,7 +15,6 @@ import com.aura.project.rickandmortywiki.Router
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.Episode
 import com.aura.project.rickandmortywiki.databinding.CharacterDetailsFragmentBinding
-import kotlinx.android.synthetic.main.error_layout.*
 
 class CharacterDetailsFragment private constructor() : Fragment(),
     EpisodeAdapter.OnEpisodeClickListener {
@@ -64,14 +62,22 @@ class CharacterDetailsFragment private constructor() : Fragment(),
         _binding.lifecycleOwner = this
         _viewModel.apply {
             episodes.observe(viewLifecycleOwner, episodesObserver)
+            navToEpisode.observe(viewLifecycleOwner, navObserver)
         }
     }
 
-    override fun onEpisodeClick(episode: String) {
-        _router?.openEpisode(episode)
+    override fun onEpisodeClick(position: Int) {
+        _viewModel.episodeClickAt(position)
     }
 
     private val episodesObserver = Observer<List<Episode>> { episodes ->
         _adapter.list = episodes.map { "${it.seasonAndNum} ${it.title}" }
+    }
+
+    private val navObserver = Observer<Episode> { episodeToNavigate ->
+        episodeToNavigate?.let {
+            _router?.openEpisode(episodeToNavigate.id)
+            _viewModel.navigated()
+        }
     }
 }

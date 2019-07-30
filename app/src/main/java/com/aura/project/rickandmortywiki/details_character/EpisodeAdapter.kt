@@ -27,11 +27,7 @@ class EpisodeAdapter(fragment: OnEpisodeClickListener) : RecyclerView.Adapter<Ep
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) = holder bindBy list[position]
 
     interface OnEpisodeClickListener {
-        fun onEpisodeClick(episode: String)
-    }
-
-    fun onDestroy() {
-        _onEpisodeClickListener = null
+        fun onEpisodeClick(position: Int)
     }
 
     inner class EpisodeViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
@@ -40,7 +36,7 @@ class EpisodeAdapter(fragment: OnEpisodeClickListener) : RecyclerView.Adapter<Ep
         }
 
         override fun onClick(v: View?) {
-            _onEpisodeClickListener?.onEpisodeClick(list[adapterPosition])
+            _onEpisodeClickListener?.onEpisodeClick(adapterPosition)
         }
 
         private var name: TextView = itemView.findViewById(R.id.episode_item)

@@ -1,14 +1,15 @@
 package com.aura.project.rickandmortywiki.details_episode
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.os.bundleOf
-
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
 import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.Router
 import com.aura.project.rickandmortywiki.data.Character
@@ -40,6 +41,7 @@ class EpisodeFragment private constructor(): Fragment(), CharacterAdapter.Charac
             _date = findViewById(R.id.date)
         }
         _adapter = CharacterAdapter(this)
+        view.findViewById<RecyclerView>(R.id.episode_recycler).adapter = _adapter
         return view
     }
 
@@ -48,6 +50,16 @@ class EpisodeFragment private constructor(): Fragment(), CharacterAdapter.Charac
         val id = arguments!!.getLong(CLINIC_ID_KEY)
         val factory = EpisodeViewModel.Factory(id, activity!!.application)
         _viewModel = ViewModelProviders.of(this, factory).get(EpisodeViewModel::class.java)
+        _viewModel.apply {
+
+            episode.observe(viewLifecycleOwner, Observer { episode ->
+                _title.text = episode.title
+                _shortTitle.text = episode.shortTitle
+                _date.text = episode.date
+            })
+
+            chars.observe(viewLifecycleOwner, Observer { _adapter.charList = it })
+        }
     }
 
     override fun onCharClicked(character: Character) {

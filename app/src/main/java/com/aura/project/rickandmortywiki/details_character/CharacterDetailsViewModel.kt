@@ -6,10 +6,7 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.Episode
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
-import com.aura.project.rickandmortywiki.data.repository.CharLocalRepo
-import com.aura.project.rickandmortywiki.data.repository.CharNetRepo
-import com.aura.project.rickandmortywiki.data.repository.CharRepo
-import com.aura.project.rickandmortywiki.data.repository.EpisodeRepo
+import com.aura.project.rickandmortywiki.data.repository.*
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
 import kotlinx.coroutines.launch
@@ -20,8 +17,9 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
     private val _error = MutableLiveData<Boolean>()
     private val _charLiveData = MutableLiveData<Character>()
     private val _episodes = MutableLiveData<List<Episode>>()
-    private val _episodeRepo = EpisodeRepo(ApiService.getInstance())
-    private val _charRepo = CharRepo(
+    private val _navToEpisode = MutableLiveData<Episode>()
+    private val _episodeRepo: EpisodeDataSource = EpisodeRepo(ApiService.getInstance())
+    private val _charRepo: CharacterDataSource = CharRepo(
         CharNetRepo(
             ApiService.getInstance()
         ),
@@ -35,6 +33,9 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
 
     val error: LiveData<Boolean>
         get() = _error
+
+    val navToEpisode: LiveData<Episode>
+        get() = _navToEpisode
 
     val name: LiveData<String> = Transformations.map(_charLiveData)
     { it.name }
@@ -80,7 +81,6 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
         val episodes = _episodeRepo.getEpisodesFromUrls(episodeUrls)
         if (episodes is SuccessfulRequest)
             _episodes.value = episodes.body
-        //TODO: show episode error
     }
 
     fun originClicked() {
@@ -93,6 +93,14 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
 
     fun errorButtonClicked() {
         loadCharacter()
+    }
+
+    fun episodeClickAt(position: Int) {
+        _navToEpisode.value = _episodes.value!![position]
+    }
+
+    fun navigated() {
+        _navToEpisode.value = null
     }
 
     class Factory(val id: Long, val app: Application) : ViewModelProvider.Factory {

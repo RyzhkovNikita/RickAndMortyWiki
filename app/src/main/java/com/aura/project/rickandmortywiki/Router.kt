@@ -7,5 +7,5 @@ interface Router {
     fun openCharacter(charId: Long)
     fun openLocation(location: Location)
     fun openOrigin(origin: Origin)
-    fun openEpisode(episode: String)
+    fun openEpisode(episodeId: Long)
 }

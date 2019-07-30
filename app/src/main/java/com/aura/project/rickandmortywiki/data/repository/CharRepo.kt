@@ -57,4 +57,12 @@ class CharRepo(private val netRepo: CharNetRepo, private val localRepo: CharLoca
                 is FailedRequest -> netRepo.getChars(ids)
             }
         }
+
+    override suspend fun getCharsFromUrl(ids: List<String>): RepoRequest<List<Character>> =
+        withContext(Dispatchers.IO) {
+            when (val local = localRepo.getCharsFromUrl(ids)) {
+                is SuccessfulRequest -> local
+                is FailedRequest -> netRepo.getCharsFromUrl(ids)
+            }
+        }
 }

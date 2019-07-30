@@ -1,5 +1,6 @@
 package com.aura.project.rickandmortywiki.data.repository
 
+import com.aura.project.rickandmortywiki.UrlTransformer
 import com.aura.project.rickandmortywiki.data.Episode
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
@@ -9,15 +10,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class EpisodeRepo(private val apiService: ApiService) : EpisodeDataSource {
-    private val scheme = "https://rickandmortyapi.com/api/episode/"
     override suspend fun getEpisodesFromUrls(urls: List<String>): RepoRequest<List<Episode>> =
         withContext(Dispatchers.IO) {
-            val episodeIds = urls
-                .map { url -> url.substringAfter(scheme, "") }
-                .filter { idString -> idString.isNotEmpty() }
-                .reduce{acc, id -> "$acc, $id"}
+            val requestPath = UrlTransformer.extractEpisodeRequestPath(urls)
             try {
-                val response = apiService.getEpisodes(episodeIds).execute()
+                val response = apiService.getEpisodes(requestPath).execute()
                 if (response.isSuccessful)
                     return@withContext SuccessfulRequest(response.body()!!, SuccessfulRequest.FROM_NET)
             } catch (e: Exception) {
@@ -25,4 +22,16 @@ class EpisodeRepo(private val apiService: ApiService) : EpisodeDataSource {
             }
             return@withContext FailedRequest<List<Episode>>()
         }
+
+    override suspend fun getEpisodeById(id: Long): RepoRequest<Episode> = withContext(Dispatchers.IO) {
+        try {
+            val response = apiService.getEpisode(id).execute()
+            if (response.isSuccessful)
+                return@withContext SuccessfulRequest(response.body()!!, SuccessfulRequest.FROM_NET)
+            else
+                return@withContext FailedRequest<Episode>()
+        } catch (e: Exception) {
+            return@withContext FailedRequest<Episode>()
+        }
+    }
 }

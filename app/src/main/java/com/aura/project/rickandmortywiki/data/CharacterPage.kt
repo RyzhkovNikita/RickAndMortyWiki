@@ -44,7 +44,7 @@ data class Info(
 )
 
 data class Episode(
-    val id: Int,
+    val id: Long,
     @SerializedName("name")
     val title: String,
     @SerializedName("air_date")

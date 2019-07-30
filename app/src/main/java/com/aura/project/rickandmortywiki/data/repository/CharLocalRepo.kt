@@ -1,5 +1,6 @@
 package com.aura.project.rickandmortywiki.data.repository
 
+import com.aura.project.rickandmortywiki.UrlTransformer
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
@@ -34,9 +35,19 @@ class CharLocalRepo(private val charDao: CharDao) :
         return FailedRequest()
     }
 
-    override suspend fun getChars(ids: LongArray): RepoRequest<List<Character>> =
-        SuccessfulRequest(
-            body = charDao.getById(ids).sortedBy { character -> character.id }
-            , source = SuccessfulRequest.FROM_LOCAL
-        )
+    override suspend fun getChars(ids: LongArray): RepoRequest<List<Character>> {
+        val characters = charDao.getById(ids)
+        return if (characters.size == ids.size)
+            SuccessfulRequest(
+                body = characters.sortedBy { character -> character.id }
+                , source = SuccessfulRequest.FROM_LOCAL
+            )
+        else FailedRequest()
+    }
+
+
+    override suspend fun getCharsFromUrl(ids: List<String>): RepoRequest<List<Character>> {
+        val idArray = UrlTransformer.urlsToIdArray(ids)
+        return getChars(idArray)
+    }
 }

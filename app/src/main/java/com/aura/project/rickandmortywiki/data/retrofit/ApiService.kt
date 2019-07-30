@@ -11,21 +11,24 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+private const val character = "character"
+private const val episode = "episode"
+
 interface ApiService {
 
-    @GET("character/")
+    @GET("$character/")
     fun getCharPage(@Query("page") page: Int): Call<CharacterPage>
 
-    @GET("character/{id}")
+    @GET("$character/{id}")
     fun getCharById(@Path("id") id: Long): Call<Character>
 
-    @GET("character/{ids}")
+    @GET("$character/{ids}")
     fun getCharsById(@Path("ids") list: String): Call<List<Character>>
 
-    @GET("episode/{id}")
-    fun getEpisode(@Path("id") id: Int): Call<Episode>
+    @GET("$episode/{id}")
+    fun getEpisode(@Path("id") id: Long): Call<Episode>
 
-    @GET("episode/{ids}")
+    @GET("$episode/{ids}")
     fun getEpisodes(@Path("ids") ids: String): Call<List<Episode>>
 
     companion object {

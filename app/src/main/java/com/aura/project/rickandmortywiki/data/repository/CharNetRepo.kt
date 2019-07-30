@@ -1,6 +1,7 @@
 package com.aura.project.rickandmortywiki.data.repository
 
 import android.util.SparseArray
+import com.aura.project.rickandmortywiki.UrlTransformer
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
@@ -30,7 +31,7 @@ class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
     override suspend fun clearAll() {}
 
     override suspend fun getChars(ids: LongArray): RepoRequest<List<Character>> {
-        val requestPath = ids.joinToString(separator = ",", transform = { it.toString() })
+        val requestPath = UrlTransformer.getRequestPath(ids)
         val response = charApi.getCharsById(requestPath).execute()
         if (response.isSuccessful)
             return SuccessfulRequest(body = response.body()!!, source = SuccessfulRequest.FROM_NET)
@@ -43,5 +44,10 @@ class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
         if (response.isSuccessful)
             return SuccessfulRequest(body = response.body()!!, source = SuccessfulRequest.FROM_NET)
         return FailedRequest()
+    }
+
+    override suspend fun getCharsFromUrl(ids: List<String>): RepoRequest<List<Character>> {
+        val idArray = UrlTransformer.urlsToIdArray(ids)
+        return getChars(idArray)
     }
 }
