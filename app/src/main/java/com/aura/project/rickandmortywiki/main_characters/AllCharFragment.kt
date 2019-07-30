@@ -17,7 +17,7 @@ import com.aura.project.rickandmortywiki.data.Character
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
-class AllCharFragment private constructor(): Fragment(), CharacterAdapter.OnCharClickListener,
+class AllCharFragment : Fragment(), CharacterAdapter.OnCharClickListener,
     CharacterAdapter.CharacterLoader {
 
     private var router: Router? = null

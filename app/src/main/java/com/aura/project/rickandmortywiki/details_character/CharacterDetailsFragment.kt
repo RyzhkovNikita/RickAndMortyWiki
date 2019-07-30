@@ -16,7 +16,7 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.Episode
 import com.aura.project.rickandmortywiki.databinding.CharacterDetailsFragmentBinding
 
-class CharacterDetailsFragment private constructor() : Fragment(),
+class CharacterDetailsFragment : Fragment(),
     EpisodeAdapter.OnEpisodeClickListener {
 
     companion object {

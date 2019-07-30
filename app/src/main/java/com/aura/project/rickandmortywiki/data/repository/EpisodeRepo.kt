@@ -14,9 +14,15 @@ class EpisodeRepo(private val apiService: ApiService) : EpisodeDataSource {
         withContext(Dispatchers.IO) {
             val requestPath = UrlTransformer.extractEpisodeRequestPath(urls)
             try {
-                val response = apiService.getEpisodes(requestPath).execute()
-                if (response.isSuccessful)
-                    return@withContext SuccessfulRequest(response.body()!!, SuccessfulRequest.FROM_NET)
+                if (urls.size > 1) {
+                    val response = apiService.getEpisodes(requestPath).execute()
+                    if (response.isSuccessful)
+                        return@withContext SuccessfulRequest(response.body()!!, SuccessfulRequest.FROM_NET)
+                } else {
+                    val response = apiService.getEpisode(requestPath.toLong()).execute()
+                    if (response.isSuccessful)
+                        return@withContext SuccessfulRequest(listOf(response.body()!!), SuccessfulRequest.FROM_NET)
+                }
             } catch (e: Exception) {
                 return@withContext FailedRequest<List<Episode>>()
             }
