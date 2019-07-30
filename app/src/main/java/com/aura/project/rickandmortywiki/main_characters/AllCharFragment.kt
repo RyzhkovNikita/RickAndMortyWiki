@@ -81,7 +81,8 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnCharClickListener,
 
     @ExperimentalCoroutinesApi
     override fun onDestroy() {
-        _adapter.onDestroy()
+        if (::_adapter.isInitialized)
+            _adapter.onDestroy()
         router = null
         super.onDestroy()
     }

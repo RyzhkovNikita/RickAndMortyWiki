@@ -56,3 +56,19 @@ data class Episode(
     val url: String,
     val created: String
 )
+
+data class LocationPage(
+    val info: Info,
+    val results: List<LocationPlain>
+)
+
+
+data class LocationPlain(
+    val created: String,
+    val dimension: String,
+    val id: Long,
+    val name: String,
+    val residents: List<String>,
+    val type: String,
+    val url: String
+)

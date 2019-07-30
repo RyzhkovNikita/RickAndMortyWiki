@@ -12,8 +12,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.Router
+import com.aura.project.rickandmortywiki.UrlTransformer
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.Episode
+import com.aura.project.rickandmortywiki.data.Location
+import com.aura.project.rickandmortywiki.data.Origin
 import com.aura.project.rickandmortywiki.databinding.CharacterDetailsFragmentBinding
 
 class CharacterDetailsFragment : Fragment(),
@@ -26,8 +29,6 @@ class CharacterDetailsFragment : Fragment(),
                 arguments = bundleOf(CHAR_ID_KEY to id)
             }
     }
-
-    private var _router: Router? = null
 
     private val _layoutID = R.layout.character_details_fragment
 
@@ -45,11 +46,8 @@ class CharacterDetailsFragment : Fragment(),
         _binding.apply {
             episodes.adapter = _adapter
             episodes.isNestedScrollingEnabled = false
-            detailsLocation.setOnClickListener { _router?.openLocation(_character.location) }
-            detailsOrigin.setOnClickListener { _router?.openOrigin(_character.origin) }
             error.findViewById<Button>(R.id.error_button).setOnClickListener { viewModel?.errorButtonClicked() }
         }
-        _router = activity as Router
         return _binding.root
     }
 
@@ -62,7 +60,7 @@ class CharacterDetailsFragment : Fragment(),
         _binding.lifecycleOwner = this
         _viewModel.apply {
             episodes.observe(viewLifecycleOwner, episodesObserver)
-            navToEpisode.observe(viewLifecycleOwner, navObserver)
+            navDestination.observe(viewLifecycleOwner, navObserver)
         }
     }
 
@@ -74,9 +72,17 @@ class CharacterDetailsFragment : Fragment(),
         _adapter.list = episodes.map { "${it.seasonAndNum} ${it.title}" }
     }
 
-    private val navObserver = Observer<Episode> { episodeToNavigate ->
-        episodeToNavigate?.let {
-            _router?.openEpisode(episodeToNavigate.id)
+    private val navObserver = Observer<Any> { navDestination ->
+        navDestination?.let {
+            when (navDestination) {
+                is Episode -> (activity as Router).openEpisode(navDestination.id)
+                is Location -> (activity as Router).openLocation(
+                    UrlTransformer.extractIdFromLocationUrl(navDestination.url)
+                )
+                is Origin -> (activity as Router).openLocation(
+                    UrlTransformer.extractIdFromLocationUrl(navDestination.url)
+                )
+            }
             _viewModel.navigated()
         }
     }

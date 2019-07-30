@@ -7,6 +7,7 @@ import com.aura.project.rickandmortywiki.data.Location
 import com.aura.project.rickandmortywiki.data.Origin
 import com.aura.project.rickandmortywiki.details_character.CharacterDetailsFragment
 import com.aura.project.rickandmortywiki.details_episode.EpisodeFragment
+import com.aura.project.rickandmortywiki.details_location.LocationFragment
 import com.aura.project.rickandmortywiki.main_characters.AllCharFragment
 
 class MainActivity : AppCompatActivity(), Router {
@@ -21,12 +22,8 @@ class MainActivity : AppCompatActivity(), Router {
         openFragment(CharacterDetailsFragment.getInstance(charId), "detailChar $charId")
     }
 
-    override fun openLocation(location: Location) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun openOrigin(origin: Origin) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun openLocation(locationId: Long) {
+        openFragment(LocationFragment.newInstance(locationId), "location $locationId")
     }
 
     override fun openEpisode(episodeId: Long) {

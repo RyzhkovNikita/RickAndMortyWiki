@@ -17,7 +17,7 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
     private val _error = MutableLiveData<Boolean>()
     private val _charLiveData = MutableLiveData<Character>()
     private val _episodes = MutableLiveData<List<Episode>>()
-    private val _navToEpisode = MutableLiveData<Episode>()
+    private val _navDestination = MutableLiveData<Any>()
     private val _episodeRepo: EpisodeDataSource = EpisodeRepo(ApiService.getInstance())
     private val _charRepo: CharacterDataSource = CharRepo(
         CharNetRepo(
@@ -34,8 +34,8 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
     val error: LiveData<Boolean>
         get() = _error
 
-    val navToEpisode: LiveData<Episode>
-        get() = _navToEpisode
+    val navDestination: LiveData<Any>
+        get() = _navDestination
 
     val name: LiveData<String> = Transformations.map(_charLiveData)
     { it.name }
@@ -84,11 +84,11 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
     }
 
     fun originClicked() {
-
+        _navDestination.value = _charLiveData.value!!.origin
     }
 
     fun locationClicked() {
-
+        _navDestination.value = _charLiveData.value!!.location
     }
 
     fun errorButtonClicked() {
@@ -96,11 +96,11 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
     }
 
     fun episodeClickAt(position: Int) {
-        _navToEpisode.value = _episodes.value!![position]
+        _navDestination.value = _episodes.value!![position]
     }
 
     fun navigated() {
-        _navToEpisode.value = null
+        _navDestination.value = null
     }
 
     class Factory(val id: Long, val app: Application) : ViewModelProvider.Factory {

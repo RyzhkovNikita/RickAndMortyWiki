@@ -3,6 +3,7 @@ package com.aura.project.rickandmortywiki.data.retrofit
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.CharacterPage
 import com.aura.project.rickandmortywiki.data.Episode
+import com.aura.project.rickandmortywiki.data.LocationPlain
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -13,6 +14,7 @@ import retrofit2.http.Query
 
 private const val character = "character"
 private const val episode = "episode"
+private const val location = "location"
 
 interface ApiService {
 
@@ -30,6 +32,9 @@ interface ApiService {
 
     @GET("$episode/{ids}")
     fun getEpisodes(@Path("ids") ids: String): Call<List<Episode>>
+
+    @GET("$location/{id}")
+    fun getLocation(@Path("id") id: Long): Call<LocationPlain>
 
     companion object {
         @Volatile
