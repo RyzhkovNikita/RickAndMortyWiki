@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.Router
-import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.main_characters.CharacterAdapter
 
 class EpisodeFragment : Fragment(), CharacterAdapter.CharacterLoader, CharacterAdapter.OnCharClickListener {
@@ -58,12 +57,16 @@ class EpisodeFragment : Fragment(), CharacterAdapter.CharacterLoader, CharacterA
                 _date.text = episode.date
             })
 
-            chars.observe(viewLifecycleOwner, Observer { _adapter.charList = it })
+            chars.observe(viewLifecycleOwner, Observer { _adapter.itemList = it })
         }
     }
 
-    override fun onCharClicked(character: Character) {
-        (activity as Router).openCharacter(character.id)
+    override fun onCharClicked(characterId: Long) {
+        (activity as Router).openCharacter(characterId)
+    }
+
+    override fun onErrorClick() {
+
     }
 
     override fun endReached() {

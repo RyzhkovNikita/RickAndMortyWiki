@@ -1,7 +1,6 @@
 package com.aura.project.rickandmortywiki
 
-class UrlTransformer {
-    companion object {
+object UrlTransformer {
         private const val char_scheme = "https://rickandmortyapi.com/api/character/"
         private const val episode_scheme = "https://rickandmortyapi.com/api/episode/"
         private const val location_scheme = "https://rickandmortyapi.com/api/location/"
@@ -21,4 +20,3 @@ class UrlTransformer {
 
         fun extractIdFromLocationUrl(url: String) = url.substringAfter(location_scheme, "").toLong()
     }
-}

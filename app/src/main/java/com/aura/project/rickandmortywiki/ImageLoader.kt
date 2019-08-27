@@ -7,9 +7,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class ImageLoader {
-    /**
-     * if it will be need, it may be replaced by Picasso or some else implementation
-     */
     companion object {
         fun with(context: Context): ImageLoaderSettings = ImageLoaderSettings(context)
     }
@@ -55,7 +52,7 @@ class ImageLoader {
             val manager =
                 Glide.with(context)
                     .load(url)
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .timeout(timeoutInMs)
             if (cutCircle)
                 manager.circleCrop()

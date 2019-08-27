@@ -36,7 +36,7 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context) = Room
-            .databaseBuilder(context, AppDatabase::class.java, "todo-list.db")
+            .databaseBuilder(context, AppDatabase::class.java, "todo-itemList.db")
             .build()
     }
 }

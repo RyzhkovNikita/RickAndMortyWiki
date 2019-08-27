@@ -8,6 +8,8 @@ import com.aura.project.rickandmortywiki.data.SuccessfulRequest
 import com.aura.project.rickandmortywiki.data.repository.*
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
+import com.aura.project.rickandmortywiki.main_characters.CharToShowItem
+import com.aura.project.rickandmortywiki.main_characters.ListItem
 import kotlinx.coroutines.launch
 
 class EpisodeViewModel(val id: Long, app: Application) : AndroidViewModel(app) {
@@ -36,8 +38,9 @@ class EpisodeViewModel(val id: Long, app: Application) : AndroidViewModel(app) {
     val episode: LiveData<EpisodeModel>
         get() = _episode
 
-    val chars: LiveData<List<Character>>
-        get() = _chars
+    val chars: LiveData<List<ListItem>> = Transformations.map(_chars) { list ->
+        return@map list.map { CharToShowItem(it.id, it.name, it.url) }
+    }
 
     private val _episodeRepo: EpisodeDataSource = EpisodeRepo(
         ApiService.getInstance()

@@ -2,10 +2,7 @@ package com.aura.project.rickandmortywiki.main_characters
 
 import android.accounts.NetworkErrorException
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
 import com.aura.project.rickandmortywiki.data.repository.CharLocalRepo
@@ -24,8 +21,10 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
     private val _showingError = MutableLiveData<Boolean>()
     val inProgress: LiveData<Boolean>
         get() = _inProgress
-    val charList: LiveData<List<Character>>
-        get() = _charList
+    val charList: LiveData<List<CharToShowItem>> = Transformations.map(_charList) { list ->
+        return@map list.map { CharToShowItem(it.id, it.name, it.url) }
+    }
+
     val showingError: LiveData<Boolean>
         get() = _showingError
 

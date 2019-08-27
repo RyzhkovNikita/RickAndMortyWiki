@@ -1,88 +1,74 @@
 package com.aura.project.rickandmortywiki.main_characters
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aura.project.rickandmortywiki.CharDiffCallback
-import com.aura.project.rickandmortywiki.ImageLoader
-import com.aura.project.rickandmortywiki.R
-import com.aura.project.rickandmortywiki.data.Character
+import com.hannesdorfmann.adapterdelegates4.AdapterDelegatesManager
+import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import kotlinx.coroutines.*
 
-class CharacterAdapter(fragment: Fragment) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
+class CharacterAdapter(fragment: Fragment) : ListDelegationAdapter<List<ListItem>>() {
 
     private val _PAGE_SIZE = 20
-    private var _onCharClickListener: OnCharClickListener? = fragment as OnCharClickListener
-    private var _loader: CharacterLoader? = fragment as CharacterLoader
-    private val _context = fragment.context
-    private val _scope = CoroutineScope(Dispatchers.Main)
+    private var onCharClickListener: OnCharClickListener? = fragment as OnCharClickListener
+    private var loader: CharacterLoader? = fragment as CharacterLoader
+    private val scope = CoroutineScope(Dispatchers.Main)
+    private var diffJob = Job()
 
-    var charList: List<Character> = ArrayList()
+    init {
+        delegatesManager.apply {
+            addDelegate(characterDelegate { onCharClickListener?.onCharClicked(it.id) })
+            addDelegate(errorDelegate { onCharClickListener?.onErrorClick() })
+        }
+    }
+
+    var itemList: List<ListItem> = ArrayList()
         set(value) {
-            _scope.launch {
+            diffJob.cancel()
+            diffJob = scope.launch {
                 val diffResult = calculateDiff(field, value)
                 field = value
+                setItems(value)
                 diffResult.dispatchUpdatesTo(this@CharacterAdapter)
             }
         }
 
-    private suspend fun calculateDiff(oldList: List<Character>, newList: List<Character>): DiffUtil.DiffResult =
-        withContext(Dispatchers.IO) {
+    private suspend fun calculateDiff(
+        oldList: List<ListItem>,
+        newList: List<ListItem>
+    ): DiffUtil.DiffResult =
+        withContext(Dispatchers.Default) {
             DiffUtil.calculateDiff(CharDiffCallback(oldList, newList))
         }
 
-    override fun getItemCount(): Int = charList.size
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder =
-        CharacterViewHolder(LayoutInflater.from(_context).inflate(R.layout.character_card, parent, false))
-
-    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        holder bindBy charList[position]
-        if (charList.size - position == _PAGE_SIZE) _loader?.endReached()
+    override fun getItemViewType(position: Int): Int {
+        return delegatesManager.getItemViewType(items, position)
     }
 
+    override fun getItemCount(): Int = itemList.size
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        delegatesManager.onCreateViewHolder(parent, viewType)
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        delegatesManager.onBindViewHolder(items, position, holder)
+        if (itemList.size - position == _PAGE_SIZE) loader?.endReached()
+    }
 
     @ExperimentalCoroutinesApi
     fun onDestroy() {
-        _onCharClickListener = null
-        _scope.cancel()
+        onCharClickListener = null
+        diffJob.cancel()
     }
 
     interface OnCharClickListener {
-        fun onCharClicked(character: Character)
+        fun onCharClicked(characterId: Long)
+        fun onErrorClick()
     }
 
     interface CharacterLoader {
         fun endReached()
-    }
-
-    inner class CharacterViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        init {
-            view.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View?) {
-            _onCharClickListener?.onCharClicked(charList[adapterPosition])
-        }
-
-        private var avatar: ImageView = itemView.findViewById(R.id.char_avatar)
-        private var name: TextView = itemView.findViewById(R.id.char_name_tv)
-
-
-        infix fun bindBy(character: Character) {
-            name.text = character.name
-            ImageLoader
-                .with(_context!!)
-                .from(character.image)
-                .to(avatar)
-                .cutCircle()
-                .errorImage(R.drawable.char_error_avatar)
-                .load()
-        }
     }
 }
