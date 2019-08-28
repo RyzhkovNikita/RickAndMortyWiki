@@ -24,13 +24,13 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
     private lateinit var viewModel: AllCharViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CharacterAdapter
-    private var currentListItem: List<ListItem> = listOf()
+    private var currentListItem: List<ListItem> = ArrayList()
     private var showError = false
 
     private val _pagedListObserver = Observer<List<ListItem>> { newList ->
         currentListItem = newList
         if (showError) {
-            currentListItem.toMutableList() + ErrorItem()
+            currentListItem = currentListItem.toMutableList() + ErrorItem()
         }
         adapter.itemList = currentListItem
     }
@@ -39,11 +39,13 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
     }
     private val _showErrorObserver = Observer<Boolean> { shouldShowError ->
         if (shouldShowError && !showError) {
-            currentListItem.toMutableList() + ErrorItem()
+            currentListItem = currentListItem.toMutableList() + ErrorItem()
             adapter.itemList = currentListItem
+            showError = true
         } else if (!shouldShowError && showError) {
-            currentListItem.toMutableList().remove(ErrorItem())
+            currentListItem = currentListItem.toMutableList().dropLast(1)
             adapter.itemList = currentListItem
+            showError = false
         }
     }
 
@@ -54,6 +56,13 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
         val view = inflater.inflate(R.layout.all_char_fragment, container, false)
         adapter = CharacterAdapter(this)
         recyclerView = view.findViewById(R.id.char_recycler)
+        val layoutManager = recyclerView.layoutManager as GridLayoutManager
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup(){
+            override fun getSpanSize(position: Int): Int {
+                if (currentListItem[position] is ErrorItem) return 3
+                return 1
+            }
+        }
         recyclerView.addOnScrollListener(object :
             EndlessRecyclerViewScrollListener(recyclerView.layoutManager as GridLayoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
