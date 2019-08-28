@@ -11,6 +11,7 @@ import com.aura.project.rickandmortywiki.data.repository.CharRepo
 import com.aura.project.rickandmortywiki.data.repository.CharacterDataSource
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
+import com.aura.project.rickandmortywiki.toCharToShowList
 import kotlinx.coroutines.launch
 
 class AllCharViewModel(application: Application) : AndroidViewModel(application) {
@@ -22,7 +23,7 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
     val inProgress: LiveData<Boolean>
         get() = _inProgress
     val charList: LiveData<List<CharToShowItem>> = Transformations.map(_charList) { list ->
-        return@map list.map { CharToShowItem(it.id, it.name, it.url) }
+        return@map list.toCharToShowList()
     }
 
     val showingError: LiveData<Boolean>

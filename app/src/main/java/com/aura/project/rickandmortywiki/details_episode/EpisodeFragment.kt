@@ -14,7 +14,7 @@ import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.Router
 import com.aura.project.rickandmortywiki.main_characters.CharacterAdapter
 
-class EpisodeFragment : Fragment(), CharacterAdapter.CharacterLoader, CharacterAdapter.OnCharClickListener {
+class EpisodeFragment : Fragment(), CharacterAdapter.CharacterLoader, CharacterAdapter.OnItemClickListener {
 
     companion object {
         private const val CLINIC_ID_KEY = "clinicIdKey"

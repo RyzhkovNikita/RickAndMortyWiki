@@ -22,18 +22,6 @@
                 app:spanCount="3"
                 tools:itemCount="10"
                 tools:listitem="@layout/character_card" />
-        <ProgressBar
-                android:id="@+id/all_char_progress"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:visibility="gone"
-                tools:visibility="visible"
-        />
-        <include android:id="@+id/all_char_error"
-                 android:layout_height="50dp"
-                 android:layout_width="match_parent"
-                 layout="@layout/error_layout"/>
-
     </LinearLayout>
 
 </ScrollView>

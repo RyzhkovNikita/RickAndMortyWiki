@@ -10,6 +10,7 @@ import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
 import com.aura.project.rickandmortywiki.main_characters.CharToShowItem
 import com.aura.project.rickandmortywiki.main_characters.ListItem
+import com.aura.project.rickandmortywiki.toCharToShowList
 import kotlinx.coroutines.launch
 
 class LocationViewModel(val id: Long, app: Application) : AndroidViewModel(app) {
@@ -32,7 +33,7 @@ class LocationViewModel(val id: Long, app: Application) : AndroidViewModel(app) 
         get() = _location
 
     val chars: LiveData<List<ListItem>> = Transformations.map(_chars) { list ->
-        return@map list.map { CharToShowItem(it.id, it.name, it.url) }
+        return@map list.toCharToShowList()
     }
 
 

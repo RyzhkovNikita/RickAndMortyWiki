@@ -4,20 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aura.project.rickandmortywiki.R
 import com.aura.project.rickandmortywiki.Router
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
-class AllCharFragment : Fragment(), CharacterAdapter.OnCharClickListener,
+class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
     CharacterAdapter.CharacterLoader {
-
-    private var router: Router? = null
 
     companion object {
         fun newInstance() = AllCharFragment()
@@ -43,12 +41,10 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnCharClickListener,
         if (shouldShowError && !showError) {
             currentListItem.toMutableList() + ErrorItem()
             adapter.itemList = currentListItem
+        } else if (!shouldShowError && showError) {
+            currentListItem.toMutableList().remove(ErrorItem())
+            adapter.itemList = currentListItem
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        router = context!! as Router
     }
 
     override fun onCreateView(
@@ -58,6 +54,12 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnCharClickListener,
         val view = inflater.inflate(R.layout.all_char_fragment, container, false)
         adapter = CharacterAdapter(this)
         recyclerView = view.findViewById(R.id.char_recycler)
+        recyclerView.addOnScrollListener(object :
+            EndlessRecyclerViewScrollListener(recyclerView.layoutManager as GridLayoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                viewModel.listEndReached()
+            }
+        })
         recyclerView.adapter = adapter
         return view
     }
@@ -73,7 +75,7 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnCharClickListener,
     }
 
     override fun onCharClicked(characterId: Long) {
-        router?.openCharacter(characterId)
+        (activity as Router).openCharacter(characterId)
     }
 
     override fun onErrorClick() {
@@ -88,7 +90,6 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnCharClickListener,
     override fun onDestroy() {
         if (::adapter.isInitialized)
             adapter.onDestroy()
-        router = null
         super.onDestroy()
     }
 
