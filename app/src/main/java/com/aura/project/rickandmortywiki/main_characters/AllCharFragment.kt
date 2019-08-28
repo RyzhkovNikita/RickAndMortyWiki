@@ -45,6 +45,7 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
                 adapter.itemList = currentListItem ?: emptyList()
             }
             is Loading -> {
+                showError = false
                 adapter.itemList = LoadingDecorator.decorate(currentListItem ?: emptyList())
             }
         }
@@ -61,7 +62,7 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
         val spanCount = layoutManager.spanCount
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup(){
             override fun getSpanSize(position: Int): Int {
-                if (currentListItem!![position] !is CharToShowItem) return spanCount
+                if (adapter.itemList[position] !is CharToShowItem) return spanCount
                 return 1
             }
         }

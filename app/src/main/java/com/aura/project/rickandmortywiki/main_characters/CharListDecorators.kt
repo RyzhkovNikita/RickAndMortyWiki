@@ -2,12 +2,12 @@ package com.aura.project.rickandmortywiki.main_characters
 
 object ErrorDecorator {
     fun decorate(list: List<ListItem>): List<ListItem> {
-        return list.also { it.toMutableList().add(ErrorItem()) }
+        return list.toMutableList() + ErrorItem()
     }
 }
 
 object LoadingDecorator {
     fun decorate(list: List<ListItem>): List<ListItem> {
-        return list.also { it.toMutableList().add(LoadingItem()) }
+        return list.toMutableList() + LoadingItem()
     }
 }
