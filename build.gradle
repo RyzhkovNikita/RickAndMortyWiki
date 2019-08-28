@@ -6,11 +6,11 @@ buildscript {
     ext.retrofit_version = '2.5.0'
     ext.rx_version = '2.1.1'
     ext.coroutin_version = '1.1.1'
-    ext.lifecycle_version = '2.2.0-alpha02'
+    ext.lifecycle_version = '2.2.0-alpha03'
+    ext.ktlint_version = '1.0.0'
     repositories {
         google()
         jcenter()
-        
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
