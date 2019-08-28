@@ -29,3 +29,5 @@ fun errorDelegate(onTryClick: () -> Unit) =
         val tryButton: Button = findViewById(R.id.error_button)
         tryButton.setOnClickListener { onTryClick() }
     }
+
+fun loadingDelegate() = adapterDelegate<LoadingItem, ListItem>(R.layout.loading_layout) {}

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aura.project.rickandmortywiki.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlin.Error
 
 
 class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
@@ -33,17 +32,20 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
             adapter.itemList = ErrorDecorator.decorate(newList)
         }
     }
+
     private val _stateObserver = Observer<State> { state ->
         when (state) {
             is Error -> {
                 if (!showError)
                     adapter.itemList = ErrorDecorator.decorate(currentListItem ?: emptyList())
+                showError = true
             }
             is Ready -> {
                 showError = false
+                adapter.itemList = currentListItem ?: emptyList()
             }
             is Loading -> {
-
+                adapter.itemList = LoadingDecorator.decorate(currentListItem ?: emptyList())
             }
         }
     }
@@ -59,7 +61,7 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
         val spanCount = layoutManager.spanCount
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup(){
             override fun getSpanSize(position: Int): Int {
-                if (currentListItem!![position] is ErrorItem) return spanCount
+                if (currentListItem!![position] !is CharToShowItem) return spanCount
                 return 1
             }
         }

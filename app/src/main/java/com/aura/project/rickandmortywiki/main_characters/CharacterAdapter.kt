@@ -19,6 +19,7 @@ class CharacterAdapter(fragment: Fragment) : ListDelegationAdapter<List<ListItem
         delegatesManager.apply {
             addDelegate(characterDelegate { onItemClickListener?.onCharClicked(it.id) })
             addDelegate(errorDelegate { onItemClickListener?.onErrorClick() })
+            addDelegate(loadingDelegate())
         }
     }
 

@@ -4,12 +4,10 @@ object ErrorDecorator {
     fun decorate(list: List<ListItem>): List<ListItem> {
         return list.also { it.toMutableList().add(ErrorItem()) }
     }
-
-    fun remove(list: List<ListItem>): List<ListItem> {
-        return list.filterNot { it is ErrorItem }
-    }
 }
 
 object LoadingDecorator {
-
+    fun decorate(list: List<ListItem>): List<ListItem> {
+        return list.also { it.toMutableList().add(LoadingItem()) }
+    }
 }
