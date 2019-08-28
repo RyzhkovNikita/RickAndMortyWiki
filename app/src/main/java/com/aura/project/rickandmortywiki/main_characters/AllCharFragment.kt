@@ -9,9 +9,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.aura.project.rickandmortywiki.R
-import com.aura.project.rickandmortywiki.Router
+import com.aura.project.rickandmortywiki.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlin.Error
 
 
 class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
@@ -24,28 +24,27 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
     private lateinit var viewModel: AllCharViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CharacterAdapter
-    private var currentListItem: List<ListItem> = ArrayList()
     private var showError = false
+    private val currentListItem
+        get() = viewModel.charList.value
 
     private val _pagedListObserver = Observer<List<ListItem>> { newList ->
-        currentListItem = newList
         if (showError) {
-            currentListItem = currentListItem.toMutableList() + ErrorItem()
+            adapter.itemList = ErrorDecorator.decorate(newList)
         }
-        adapter.itemList = currentListItem
     }
-    private val _progressBarObserver = Observer<Boolean> { inProgress ->
-        //TODO
-    }
-    private val _showErrorObserver = Observer<Boolean> { shouldShowError ->
-        if (shouldShowError && !showError) {
-            currentListItem = currentListItem.toMutableList() + ErrorItem()
-            adapter.itemList = currentListItem
-            showError = true
-        } else if (!shouldShowError && showError) {
-            currentListItem = currentListItem.toMutableList().dropLast(1)
-            adapter.itemList = currentListItem
-            showError = false
+    private val _stateObserver = Observer<State> { state ->
+        when (state) {
+            is Error -> {
+                if (!showError)
+                    adapter.itemList = ErrorDecorator.decorate(currentListItem ?: emptyList())
+            }
+            is Ready -> {
+                showError = false
+            }
+            is Loading -> {
+
+            }
         }
     }
 
@@ -57,9 +56,10 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
         adapter = CharacterAdapter(this)
         recyclerView = view.findViewById(R.id.char_recycler)
         val layoutManager = recyclerView.layoutManager as GridLayoutManager
+        val spanCount = layoutManager.spanCount
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup(){
             override fun getSpanSize(position: Int): Int {
-                if (currentListItem[position] is ErrorItem) return 3
+                if (currentListItem!![position] is ErrorItem) return spanCount
                 return 1
             }
         }
@@ -78,8 +78,7 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
         viewModel = ViewModelProviders.of(this).get(AllCharViewModel::class.java)
         viewModel.apply {
             charList.observe(viewLifecycleOwner, _pagedListObserver)
-            inProgress.observe(viewLifecycleOwner, _progressBarObserver)
-            showingError.observe(viewLifecycleOwner, _showErrorObserver)
+            state.observe(viewLifecycleOwner, _stateObserver)
         }
     }
 

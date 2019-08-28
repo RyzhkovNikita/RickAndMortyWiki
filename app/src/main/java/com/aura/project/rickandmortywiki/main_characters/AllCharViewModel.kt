@@ -3,6 +3,7 @@ package com.aura.project.rickandmortywiki.main_characters
 import android.accounts.NetworkErrorException
 import android.app.Application
 import androidx.lifecycle.*
+import com.aura.project.rickandmortywiki.*
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
 import com.aura.project.rickandmortywiki.data.repository.CharLocalRepo
@@ -11,23 +12,20 @@ import com.aura.project.rickandmortywiki.data.repository.CharRepo
 import com.aura.project.rickandmortywiki.data.repository.CharacterDataSource
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
-import com.aura.project.rickandmortywiki.toCharToShowList
 import kotlinx.coroutines.launch
 
 class AllCharViewModel(application: Application) : AndroidViewModel(application) {
     private val _INIT_PAGE_COUNT = 3
     private var _currentLoadedPages = 0
+    private val _state = MutableLiveData<State>()
     private val _charList = MutableLiveData<List<Character>>()
-    private val _inProgress = MutableLiveData<Boolean>()
-    private val _showingError = MutableLiveData<Boolean>()
-    val inProgress: LiveData<Boolean>
-        get() = _inProgress
-    val charList: LiveData<List<CharToShowItem>> = Transformations.map(_charList) { list ->
+
+    val charList: LiveData<List<ListItem>> = Transformations.map(_charList) { list ->
         return@map list.toCharToShowList()
     }
 
-    val showingError: LiveData<Boolean>
-        get() = _showingError
+    val state: LiveData<State>
+        get() = _state
 
     private val _charRepo: CharacterDataSource = CharRepo(
         CharNetRepo(
@@ -56,27 +54,19 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-
-    private fun showError() {
-        _showingError.value = true
-    }
-
-
     fun listEndReached() {
-        if (!_inProgress.value!!) launchLoading { loadPage(_currentLoadedPages + 1) }
+        if (_state.value !is Loading) launchLoading { loadPage(_currentLoadedPages + 1) }
     }
 
 
     private fun launchLoading(block: suspend () -> Unit) =
         viewModelScope.launch {
-            _showingError.value = false
-            _inProgress.value = true
+            _state.value = Loading
             try {
                 block()
+                _state.value = Ready
             } catch (e: Exception) {
-                showError()
-            } finally {
-                _inProgress.value = false
+                _state.value = Error
             }
         }
 
