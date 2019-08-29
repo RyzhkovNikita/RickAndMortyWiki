@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.aura.project.rickandmortywiki.main_characters.CharToShowItem
 import com.aura.project.rickandmortywiki.main_characters.ErrorItem
 import com.aura.project.rickandmortywiki.main_characters.ListItem
+import com.aura.project.rickandmortywiki.main_characters.LoadingItem
 
 class CharDiffCallback(private val oldList: List<ListItem>, private val newList: List<ListItem>) :
     DiffUtil.Callback() {
@@ -12,6 +13,7 @@ class CharDiffCallback(private val oldList: List<ListItem>, private val newList:
         if (oldList[oldItemPosition]::class == newList[newItemPosition]::class) {
             when (oldList[oldItemPosition]) {
                 is ErrorItem -> return true
+                is LoadingItem -> return true
                 is CharToShowItem -> {
                     val oldItem = oldList[oldItemPosition] as CharToShowItem
                     val newItem = newList[newItemPosition] as CharToShowItem
@@ -24,12 +26,11 @@ class CharDiffCallback(private val oldList: List<ListItem>, private val newList:
 
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        if (oldList[oldItemPosition] is ErrorItem) return true
+        if (oldList[oldItemPosition] !is CharToShowItem)
+            return oldList[oldItemPosition]::class == newList[newItemPosition]::class
         val oldItem = oldList[oldItemPosition] as CharToShowItem
         val newItem = newList[newItemPosition] as CharToShowItem
-        return oldItem.id == newItem.id
-                && oldItem.name == newItem.name
-                && oldItem.imageUrl == newItem.imageUrl
+        return oldItem == newItem
     }
 
 

@@ -25,12 +25,14 @@ class CharacterAdapter(fragment: Fragment) : ListDelegationAdapter<List<ListItem
 
     var itemList: List<ListItem>
         set(value) {
-            diffJob.cancel()
+            setItems(value)
+            notifyDataSetChanged()
+            /*diffJob.cancel()
             diffJob = scope.launch {
                 val diffResult = calculateDiff(items, value)
                 diffResult.dispatchUpdatesTo(this@CharacterAdapter)
                 setItems(value)
-            }
+            }*/
         }
         get() = items
 
