@@ -8,6 +8,6 @@ data class CharToShowItem(
     val imageUrl: String
 ) : ListItem
 
-class ErrorItem : ListItem
+object ErrorItem : ListItem
 
-class LoadingItem : ListItem
+object LoadingItem : ListItem
