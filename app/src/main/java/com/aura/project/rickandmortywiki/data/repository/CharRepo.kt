@@ -4,11 +4,19 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.filters.CharacterFilter
+import com.aura.project.rickandmortywiki.data.filters.NoFilter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class CharRepo(private val netRepo: CharNetRepo, private val localRepo: CharLocalRepo) :
     CharacterDataSource {
+    override var strategy: CharacterFilter = NoFilter
+        set(value) {
+            field = value
+            localRepo.strategy = value
+            netRepo.strategy = value
+        }
 
     //TODO: write lastPageNumber to SharedPref, make class to deal with sharedPref
 
