@@ -4,6 +4,6 @@ sealed class CharacterFilter
 
 object NoFilter : CharacterFilter()
 
-class NameCharFilter(name: String) : CharacterFilter()
+class NameCharFilter(val name: String) : CharacterFilter()
 
-class StatusCharFilter(status: String) : CharacterFilter()
+class StatusCharFilter(val status: String) : CharacterFilter()
