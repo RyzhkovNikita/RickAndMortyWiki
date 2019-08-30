@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.aura.project.rickandmortywiki.*
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.filters.NameCharFilter
 import com.aura.project.rickandmortywiki.data.repository.CharLocalRepo
 import com.aura.project.rickandmortywiki.data.repository.CharNetRepo
 import com.aura.project.rickandmortywiki.data.repository.CharRepo
@@ -37,6 +38,7 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
     )
 
     init {
+        _charRepo.strategy = NameCharFilter("rick")
         launchLoading {
             for (pageNum in 1.._INIT_PAGE_COUNT) {
                 loadPage(pageNum)

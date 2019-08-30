@@ -8,4 +8,5 @@
     <string name="underlined_text"><u>%s</u></string>
     <string name="members">Members:</string>
     <string name="residents">Residents:</string>
+    <string name="characters">Characters</string>
 </resources>
