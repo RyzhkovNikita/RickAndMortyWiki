@@ -22,15 +22,14 @@ class CharRepo(private val netRepo: CharNetRepo, private val localRepo: CharLoca
 
     override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> =
         withContext(Dispatchers.IO) {
-            when (val local = localRepo.getCharPage(page)) {
+            when (val localRequest = localRepo.getCharPage(page)) {
                 is SuccessfulRequest -> {
-                    local
+                    localRequest
                 }
                 is FailedRequest -> {
-                    val net = netRepo.getCharPage(page)
-                    if (net is SuccessfulRequest) {
-                        insertChars(net.body)
-                        net
+                    val netRequest = netRepo.getCharPage(page)
+                    if (netRequest is SuccessfulRequest) {
+                        netRequest
                     } else
                         FailedRequest<List<Character>>()
                 }
@@ -38,10 +37,10 @@ class CharRepo(private val netRepo: CharNetRepo, private val localRepo: CharLoca
         }
 
 
-    override suspend fun insertChars(chars: List<Character>) =
+    override suspend fun insertChars(chars: List<Character>, page: Int) =
         withContext(Dispatchers.IO) {
-            localRepo.insertChars(chars)
-            netRepo.insertChars(chars)
+            localRepo.insertChars(chars, page)
+            netRepo.insertChars(chars, page)
         }
 
     override suspend fun clearAll() =

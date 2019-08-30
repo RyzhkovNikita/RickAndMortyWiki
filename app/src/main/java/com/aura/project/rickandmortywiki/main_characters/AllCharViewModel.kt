@@ -48,6 +48,7 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
         val request = _charRepo.getCharPage(page)
         if (request is SuccessfulRequest) {
             _charList.value = _charList.value?.plus(request.body) ?: request.body
+            _charRepo.insertChars(request.body, page)
             _currentLoadedPages++
         } else {
             throw NetworkErrorException()

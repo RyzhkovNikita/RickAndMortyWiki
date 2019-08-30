@@ -25,7 +25,8 @@ class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
             is StatusCharFilter -> statusFilteredPageRequest(page, strategyOnStart.status)
         }
 
-    override suspend fun insertChars(chars: List<Character>) {
+    override suspend fun insertChars(chars: List<Character>, page: Int) {
+        _cache.put(page, chars)
     }
 
     override suspend fun clearAll() {}
