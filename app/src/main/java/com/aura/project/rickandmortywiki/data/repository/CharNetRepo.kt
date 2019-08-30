@@ -68,8 +68,7 @@ class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
     }
 
     private fun nameFilteredPageRequest(page: Int, name: String): RepoRequest<List<Character>> {
-        //TODO: create fun in api to get the page and change THIS method
-        val response = charApi.getCharPage(page).execute()
+        val response = charApi.getCharPageByName(page, name).execute()
         if (response.isSuccessful)
             return SuccessfulRequest(
                 body = response.body()!!.characters,
@@ -79,8 +78,7 @@ class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
     }
 
     private fun statusFilteredPageRequest(page: Int, status: String): RepoRequest<List<Character>> {
-        //TODO: create fun in api to get the page and change THIS method
-        val response = charApi.getCharPage(page).execute()
+        val response = charApi.getCharPageByStatus(page, status).execute()
         if (response.isSuccessful)
             return SuccessfulRequest(
                 body = response.body()!!.characters,

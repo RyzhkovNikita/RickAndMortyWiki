@@ -36,6 +36,12 @@ interface ApiService {
     @GET("$location/{id}")
     fun getLocation(@Path("id") id: Long): Call<LocationPlain>
 
+    @GET("$character/")
+    fun getCharPageByName(@Query("page") page: Int, @Query("name") name: String): Call<CharacterPage>
+
+    @GET("$character/")
+    fun getCharPageByStatus(@Query("page") page: Int, @Query("status") status: String): Call<CharacterPage>
+
     companion object {
         @Volatile
         private var instance: ApiService? = null
