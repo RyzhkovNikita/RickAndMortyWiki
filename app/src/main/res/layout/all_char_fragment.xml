@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -8,33 +8,6 @@
         android:orientation="vertical"
         android:background="@color/lightGrey"
         tools:context=".main_characters.AllCharFragment">
-
-    <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="0dp">
-
-        <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|start"
-                    android:text="@string/characters"
-                    android:textStyle="bold"
-                    android:textSize="24sp"
-                    />
-
-            <androidx.appcompat.widget.SearchView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="8dp" />
-        </FrameLayout>
-
-    </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
             android:layout_width="match_parent"
@@ -50,7 +23,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
-                    android:padding="8dp"
+                    android:paddingTop="72dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="3"
                     tools:itemCount="10"
@@ -59,4 +35,4 @@
     </ScrollView>
 
 
-</LinearLayout>
+</FrameLayout>

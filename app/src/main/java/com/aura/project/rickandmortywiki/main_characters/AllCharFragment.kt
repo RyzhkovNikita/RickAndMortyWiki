@@ -56,6 +56,7 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.all_char_fragment, container, false)
+
         adapter = CharacterAdapter(this)
         recyclerView = view.findViewById(R.id.char_recycler)
         val layoutManager = recyclerView.layoutManager as GridLayoutManager
