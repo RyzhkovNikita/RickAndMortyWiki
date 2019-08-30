@@ -14,16 +14,12 @@ import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 
 class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
 
-    override var strategy: CharacterFilter = NoFilter
+    override var strategy: CharacterFilter = NoFilter(charApi)
 
     private val _cache = SparseArray<List<Character>>()
 
     override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> =
-        when (val strategyOnStart = strategy) {
-            is NoFilter -> noFilterRequest(page)
-            is NameCharFilter -> nameFilteredPageRequest(page, strategyOnStart.name)
-            is StatusCharFilter -> statusFilteredPageRequest(page, strategyOnStart.status)
-        }
+        strategy.getPage(page)
 
     override suspend fun insertChars(chars: List<Character>, page: Int) {
         _cache.put(page, chars)
@@ -50,40 +46,5 @@ class CharNetRepo(private val charApi: ApiService) : CharacterDataSource {
     override suspend fun getCharsFromUrl(ids: List<String>): RepoRequest<List<Character>> {
         val idArray = UrlTransformer.urlsToIdArray(ids)
         return getChars(idArray)
-    }
-
-    private fun noFilterRequest(page: Int): RepoRequest<List<Character>> {
-        val charPage: List<Character>? = _cache.get(page)
-        if (charPage != null)
-            return SuccessfulRequest(body = charPage, source = SuccessfulRequest.FROM_NET)
-
-        val response = charApi.getCharPage(page).execute()
-        if (response.isSuccessful)
-            return SuccessfulRequest(
-                body = response.body()!!.characters,
-                source = SuccessfulRequest.FROM_NET
-            )
-
-        return FailedRequest()
-    }
-
-    private fun nameFilteredPageRequest(page: Int, name: String): RepoRequest<List<Character>> {
-        val response = charApi.getCharPageByName(page, name).execute()
-        if (response.isSuccessful)
-            return SuccessfulRequest(
-                body = response.body()!!.characters,
-                source = SuccessfulRequest.FROM_NET
-            )
-        return FailedRequest()
-    }
-
-    private fun statusFilteredPageRequest(page: Int, status: String): RepoRequest<List<Character>> {
-        val response = charApi.getCharPageByStatus(page, status).execute()
-        if (response.isSuccessful)
-            return SuccessfulRequest(
-                body = response.body()!!.characters,
-                source = SuccessfulRequest.FROM_NET
-            )
-        return FailedRequest()
     }
 }

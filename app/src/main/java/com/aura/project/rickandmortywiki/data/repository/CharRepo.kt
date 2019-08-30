@@ -6,12 +6,13 @@ import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
 import com.aura.project.rickandmortywiki.data.filters.CharacterFilter
 import com.aura.project.rickandmortywiki.data.filters.NoFilter
+import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class CharRepo(private val netRepo: CharNetRepo, private val localRepo: CharLocalRepo) :
     CharacterDataSource {
-    override var strategy: CharacterFilter = NoFilter
+    override var strategy: CharacterFilter = NoFilter(ApiService.getInstance())
         set(value) {
             field = value
             localRepo.strategy = value

@@ -7,12 +7,13 @@ import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
 import com.aura.project.rickandmortywiki.data.filters.CharacterFilter
 import com.aura.project.rickandmortywiki.data.filters.NoFilter
+import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.character.CharDao
 
 class CharLocalRepo(private val charDao: CharDao) :
     CharacterDataSource {
 
-    override var strategy: CharacterFilter = NoFilter
+    override var strategy: CharacterFilter = NoFilter(ApiService.getInstance())
 
     private val _PAGE_SIZE = 20
 
