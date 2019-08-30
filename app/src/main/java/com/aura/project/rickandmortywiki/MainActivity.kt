@@ -2,9 +2,8 @@ package com.aura.project.rickandmortywiki
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import com.aura.project.rickandmortywiki.data.Location
-import com.aura.project.rickandmortywiki.data.Origin
 import com.aura.project.rickandmortywiki.details_character.CharacterDetailsFragment
 import com.aura.project.rickandmortywiki.details_episode.EpisodeFragment
 import com.aura.project.rickandmortywiki.details_location.LocationFragment
@@ -15,6 +14,7 @@ class MainActivity : AppCompatActivity(), Router {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setupToolbar()
         savedInstanceState ?: openFragment(AllCharFragment.newInstance())
     }
 
@@ -28,6 +28,11 @@ class MainActivity : AppCompatActivity(), Router {
 
     override fun openEpisode(episodeId: Long) {
         openFragment(EpisodeFragment.newInstance(episodeId), "episode $episodeId")
+    }
+
+    private fun setupToolbar() {
+        val toolbar = findViewById<android.widget.Toolbar>(R.id.toolbar)
+        setActionBar(toolbar)
     }
 
     private fun openFragment(fragment: Fragment, tag: String = "") {

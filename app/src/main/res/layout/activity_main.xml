@@ -7,7 +7,7 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -37,5 +37,5 @@
                     android:layout_marginEnd="8dp" />
         </FrameLayout>
 
-    </androidx.appcompat.widget.Toolbar>
+    </Toolbar>
 </FrameLayout>

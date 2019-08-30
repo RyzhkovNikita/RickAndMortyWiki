@@ -56,12 +56,16 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.all_char_fragment, container, false)
-
+        val toolbar = activity!!.actionBar
+        toolbar?.title = "TTTITTL"
+        toolbar?.setCustomView(R.layout.error_layout)
+        /*val title = toolbar?.findViewById<TextView>(R.id.toolbar_title)
+        title?.text = "Worrrrrrks"*/
         adapter = CharacterAdapter(this)
         recyclerView = view.findViewById(R.id.char_recycler)
         val layoutManager = recyclerView.layoutManager as GridLayoutManager
         val spanCount = layoutManager.spanCount
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup(){
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 if (adapter.itemList[position] !is CharToShowItem) return spanCount
                 return 1
