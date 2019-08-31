@@ -17,7 +17,7 @@ class NameCharFilter(
     private val apiService = factory.charApi()
 
     override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> {
-        val response = apiService.getCharPageByName(page, name).execute()
+        val response = apiService.getCharPage(page, name).execute()
         if (response.isSuccessful)
             return SuccessfulRequest(
                 body = response.body()!!.characters,
@@ -36,7 +36,7 @@ class StatusCharFilter(
     private val apiService = factory.charApi()
 
     override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> {
-        val response = apiService.getCharPageByStatus(page, status).execute()
+        val response = apiService.getCharPage(page, status = status).execute()
         if (response.isSuccessful)
             return SuccessfulRequest(
                 body = response.body()!!.characters,

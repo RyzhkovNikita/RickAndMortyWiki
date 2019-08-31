@@ -19,7 +19,11 @@ private const val location = "location"
 interface ApiService {
 
     @GET("$character/")
-    fun getCharPage(@Query("page") page: Int): Call<CharacterPage>
+    fun getCharPage(
+        @Query("page") page: Int,
+        @Query("name") name: String? = null,
+        @Query("status") status: String? = null
+    ): Call<CharacterPage>
 
     @GET("$character/{id}")
     fun getCharById(@Path("id") id: Long): Call<Character>
@@ -35,12 +39,6 @@ interface ApiService {
 
     @GET("$location/{id}")
     fun getLocation(@Path("id") id: Long): Call<LocationPlain>
-
-    @GET("$character/")
-    fun getCharPageByName(@Query("page") page: Int, @Query("name") name: String): Call<CharacterPage>
-
-    @GET("$character/")
-    fun getCharPageByStatus(@Query("page") page: Int, @Query("status") status: String): Call<CharacterPage>
 
     companion object {
         @Volatile

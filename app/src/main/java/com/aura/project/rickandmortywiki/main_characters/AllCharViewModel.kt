@@ -6,9 +6,10 @@ import androidx.lifecycle.*
 import com.aura.project.rickandmortywiki.*
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
-import com.aura.project.rickandmortywiki.data.repository.repo_factory.RepoFactoryImpl
 import com.aura.project.rickandmortywiki.data.repository.char_repo.CharacterDataSource
 import com.aura.project.rickandmortywiki.data.repository.char_repo.MainCharRepo
+import com.aura.project.rickandmortywiki.data.repository.char_repo.NameFilterStrategy
+import com.aura.project.rickandmortywiki.data.repository.repo_factory.RepoFactoryImpl
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
 import kotlinx.coroutines.launch
@@ -35,6 +36,7 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
         )
 
     init {
+        _charRepo.strategy = NameFilterStrategy("rick")
         launchLoading {
             for (pageNum in 1.._INIT_PAGE_COUNT) {
                 loadPage(pageNum)
