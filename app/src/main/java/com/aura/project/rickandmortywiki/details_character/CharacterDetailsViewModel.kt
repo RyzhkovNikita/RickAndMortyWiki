@@ -6,7 +6,7 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.Episode
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
-import com.aura.project.rickandmortywiki.data.repository.RepoFactoryImpl
+import com.aura.project.rickandmortywiki.data.repository.repo_factory.RepoFactoryImpl
 import com.aura.project.rickandmortywiki.data.repository.char_repo.CharacterDataSource
 import com.aura.project.rickandmortywiki.data.repository.char_repo.MainCharRepo
 import com.aura.project.rickandmortywiki.data.repository.episode_repo.EpisodeDataSource

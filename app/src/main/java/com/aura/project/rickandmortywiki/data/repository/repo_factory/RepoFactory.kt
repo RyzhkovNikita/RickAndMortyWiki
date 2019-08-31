@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki.data.repository
+package com.aura.project.rickandmortywiki.data.repository.repo_factory
 
 import com.aura.project.rickandmortywiki.data.repository.char_repo.CharacterDataSourceInternal
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService

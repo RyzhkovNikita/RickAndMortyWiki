@@ -4,7 +4,7 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
-import com.aura.project.rickandmortywiki.data.repository.RepoFactory
+import com.aura.project.rickandmortywiki.data.repository.repo_factory.RepoFactory
 
 open class DefaultRepo(factory: RepoFactory) : CharacterDataSourceInternal {
 

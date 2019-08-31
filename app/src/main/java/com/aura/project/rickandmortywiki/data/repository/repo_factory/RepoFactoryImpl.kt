@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki.data.repository
+package com.aura.project.rickandmortywiki.data.repository.repo_factory
 
 import com.aura.project.rickandmortywiki.data.filters.NameCharFilter
 import com.aura.project.rickandmortywiki.data.filters.StatusCharFilter

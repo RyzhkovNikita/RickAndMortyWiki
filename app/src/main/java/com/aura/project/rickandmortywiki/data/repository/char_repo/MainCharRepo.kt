@@ -1,7 +1,7 @@
 package com.aura.project.rickandmortywiki.data.repository.char_repo
 
 import com.aura.project.rickandmortywiki.data.Character
-import com.aura.project.rickandmortywiki.data.repository.RepoFactory
+import com.aura.project.rickandmortywiki.data.repository.repo_factory.RepoFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
