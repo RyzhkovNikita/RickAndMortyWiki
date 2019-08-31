@@ -4,13 +4,13 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
-import com.aura.project.rickandmortywiki.data.repository.RepoFactory
+import com.aura.project.rickandmortywiki.data.repository.RepoFactoryImpl
 import com.aura.project.rickandmortywiki.data.repository.char_repo.DefaultRepo
 
 
 class NameCharFilter(
     val name: String,
-    factory: RepoFactory
+    factory: RepoFactoryImpl
 ) :
     DefaultRepo(factory) {
 
@@ -29,7 +29,7 @@ class NameCharFilter(
 
 class StatusCharFilter(
     private val status: String,
-    factory: RepoFactory
+    factory: RepoFactoryImpl
 ) :
     DefaultRepo(factory) {
 
