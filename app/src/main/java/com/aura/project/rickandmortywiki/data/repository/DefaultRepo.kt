@@ -4,20 +4,20 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
-import com.aura.project.rickandmortywiki.data.filters.CharacterFilter
-import com.aura.project.rickandmortywiki.data.filters.NoFilter
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
+import com.aura.project.rickandmortywiki.data.room.character.CharDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CharRepo(private val netRepo: CharNetRepo, private val localRepo: CharLocalRepo) :
-    CharacterDataSource {
-    override var strategy: CharacterFilter = NoFilter(ApiService.getInstance())
-        set(value) {
-            field = value
-            localRepo.strategy = value
-            netRepo.strategy = value
-        }
+open class DefaultRepo(
+    protected val apiService: ApiService,
+    protected val charDao: CharDao
+) :
+    CharacterDataSourceInternal {
+
+    private val factory = RepoFactory(apiService, charDao)
+    private val localRepo = factory.createLocalRepo()
+    private val netRepo = factory.createNetRepo()
 
     //TODO: write lastPageNumber to SharedPref, make class to deal with sharedPref
 

@@ -6,12 +6,9 @@ import androidx.lifecycle.*
 import com.aura.project.rickandmortywiki.*
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
-import com.aura.project.rickandmortywiki.data.filters.NameCharFilter
-import com.aura.project.rickandmortywiki.data.filters.StatusCharFilter
-import com.aura.project.rickandmortywiki.data.repository.CharLocalRepo
-import com.aura.project.rickandmortywiki.data.repository.CharNetRepo
-import com.aura.project.rickandmortywiki.data.repository.CharRepo
 import com.aura.project.rickandmortywiki.data.repository.CharacterDataSource
+import com.aura.project.rickandmortywiki.data.repository.DefaultStrategy
+import com.aura.project.rickandmortywiki.data.repository.MainCharRepo
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
 import kotlinx.coroutines.launch
@@ -29,17 +26,12 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
     val state: LiveData<State>
         get() = _state
 
-    private val _charRepo: CharacterDataSource = CharRepo(
-        CharNetRepo(
-            ApiService.getInstance()
-        ),
-        CharLocalRepo(
-            AppDatabase.getInstance(getApplication()).charDao()
-        )
+    private val _charRepo: CharacterDataSource = MainCharRepo(
+        ApiService.getInstance(),
+        AppDatabase.getInstance(getApplication()).charDao()
     )
 
     init {
-        _charRepo.strategy = StatusCharFilter("dead", ApiService.getInstance())
         launchLoading {
             for (pageNum in 1.._INIT_PAGE_COUNT) {
                 loadPage(pageNum)

@@ -8,20 +8,15 @@ import com.aura.project.rickandmortywiki.data.SuccessfulRequest
 import com.aura.project.rickandmortywiki.data.repository.*
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
-import com.aura.project.rickandmortywiki.main_characters.CharToShowItem
 import com.aura.project.rickandmortywiki.main_characters.ListItem
 import com.aura.project.rickandmortywiki.toCharToShowList
 import kotlinx.coroutines.launch
 
 class EpisodeViewModel(val id: Long, app: Application) : AndroidViewModel(app) {
 
-    private val _charRepo: CharacterDataSource = CharRepo(
-        CharNetRepo(
-            ApiService.getInstance()
-        ),
-        CharLocalRepo(
-            AppDatabase.getInstance(getApplication()).charDao()
-        )
+    private val _charRepo: CharacterDataSource = MainCharRepo(
+        ApiService.getInstance(),
+        AppDatabase.getInstance(getApplication()).charDao()
     )
 
     private val _episode = MutableLiveData<EpisodeModel>()

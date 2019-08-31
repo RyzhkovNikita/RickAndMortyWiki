@@ -19,13 +19,9 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
     private val _episodes = MutableLiveData<List<Episode>>()
     private val _navDestination = MutableLiveData<Any>()
     private val _episodeRepo: EpisodeDataSource = EpisodeRepo(ApiService.getInstance())
-    private val _charRepo: CharacterDataSource = CharRepo(
-        CharNetRepo(
-            ApiService.getInstance()
-        ),
-        CharLocalRepo(
-            AppDatabase.getInstance(getApplication()).charDao()
-        )
+    private val _charRepo: CharacterDataSource = MainCharRepo(
+        ApiService.getInstance(),
+        AppDatabase.getInstance(getApplication()).charDao()
     )
 
     val loading: LiveData<Boolean>

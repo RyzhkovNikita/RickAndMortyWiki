@@ -4,27 +4,18 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.repository.DefaultRepo
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
+import com.aura.project.rickandmortywiki.data.room.character.CharDao
 
-sealed class CharacterFilter(val apiService: ApiService) {
-    abstract fun getPage(page: Int): RepoRequest<List<Character>>
-}
 
-class NoFilter(apiService: ApiService) : CharacterFilter(apiService) {
-    override fun getPage(page: Int): RepoRequest<List<Character>> {
-        val response = apiService.getCharPage(page).execute()
-        if (response.isSuccessful)
-            return SuccessfulRequest(
-                body = response.body()!!.characters,
-                source = SuccessfulRequest.FROM_NET
-            )
-
-        return FailedRequest()
-    }
-}
-
-class NameCharFilter(val name: String, apiService: ApiService) : CharacterFilter(apiService) {
-    override fun getPage(page: Int): RepoRequest<List<Character>> {
+class NameCharFilter(
+    val name: String,
+    api: ApiService,
+    dao: CharDao
+) :
+    DefaultRepo(api, dao) {
+    override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> {
         val response = apiService.getCharPageByName(page, name).execute()
         if (response.isSuccessful)
             return SuccessfulRequest(
@@ -35,8 +26,13 @@ class NameCharFilter(val name: String, apiService: ApiService) : CharacterFilter
     }
 }
 
-class StatusCharFilter(val status: String, apiService: ApiService) : CharacterFilter(apiService) {
-    override fun getPage(page: Int): RepoRequest<List<Character>> {
+class StatusCharFilter(
+    private val status: String,
+    api: ApiService,
+    dao: CharDao
+) :
+    DefaultRepo(api, dao) {
+    override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> {
         val response = apiService.getCharPageByStatus(page, status).execute()
         if (response.isSuccessful)
             return SuccessfulRequest(
