@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki.data.repository
+package com.aura.project.rickandmortywiki.data.repository.episode_repo
 
 import com.aura.project.rickandmortywiki.data.Episode
 import com.aura.project.rickandmortywiki.data.RepoRequest

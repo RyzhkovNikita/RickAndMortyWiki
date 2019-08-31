@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki.data.repository
+package com.aura.project.rickandmortywiki.data.repository.char_repo
 
 sealed class Strategy
 

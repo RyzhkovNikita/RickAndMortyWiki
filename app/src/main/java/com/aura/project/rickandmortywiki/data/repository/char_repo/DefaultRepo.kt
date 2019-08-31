@@ -1,9 +1,10 @@
-package com.aura.project.rickandmortywiki.data.repository
+package com.aura.project.rickandmortywiki.data.repository.char_repo
 
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.repository.RepoFactory
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.character.CharDao
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +16,8 @@ open class DefaultRepo(
 ) :
     CharacterDataSourceInternal {
 
-    private val factory = RepoFactory(apiService, charDao)
+    private val factory =
+        RepoFactory(apiService, charDao)
     private val localRepo = factory.createLocalRepo()
     private val netRepo = factory.createNetRepo()
 

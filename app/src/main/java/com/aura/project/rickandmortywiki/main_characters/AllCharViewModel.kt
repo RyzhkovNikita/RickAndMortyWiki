@@ -6,9 +6,8 @@ import androidx.lifecycle.*
 import com.aura.project.rickandmortywiki.*
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
-import com.aura.project.rickandmortywiki.data.repository.CharacterDataSource
-import com.aura.project.rickandmortywiki.data.repository.DefaultStrategy
-import com.aura.project.rickandmortywiki.data.repository.MainCharRepo
+import com.aura.project.rickandmortywiki.data.repository.char_repo.CharacterDataSource
+import com.aura.project.rickandmortywiki.data.repository.char_repo.MainCharRepo
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
 import kotlinx.coroutines.launch
@@ -26,10 +25,11 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
     val state: LiveData<State>
         get() = _state
 
-    private val _charRepo: CharacterDataSource = MainCharRepo(
-        ApiService.getInstance(),
-        AppDatabase.getInstance(getApplication()).charDao()
-    )
+    private val _charRepo: CharacterDataSource =
+        MainCharRepo(
+            ApiService.getInstance(),
+            AppDatabase.getInstance(getApplication()).charDao()
+        )
 
     init {
         launchLoading {

@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki.data.repository
+package com.aura.project.rickandmortywiki.data.repository.location_repo
 
 import com.aura.project.rickandmortywiki.data.LocationPlain
 import com.aura.project.rickandmortywiki.data.RepoRequest

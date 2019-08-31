@@ -5,7 +5,10 @@ import androidx.lifecycle.*
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.Episode
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
-import com.aura.project.rickandmortywiki.data.repository.*
+import com.aura.project.rickandmortywiki.data.repository.char_repo.CharacterDataSource
+import com.aura.project.rickandmortywiki.data.repository.char_repo.MainCharRepo
+import com.aura.project.rickandmortywiki.data.repository.episode_repo.EpisodeDataSource
+import com.aura.project.rickandmortywiki.data.repository.episode_repo.EpisodeRepo
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.AppDatabase
 import com.aura.project.rickandmortywiki.main_characters.ListItem
@@ -14,10 +17,11 @@ import kotlinx.coroutines.launch
 
 class EpisodeViewModel(val id: Long, app: Application) : AndroidViewModel(app) {
 
-    private val _charRepo: CharacterDataSource = MainCharRepo(
-        ApiService.getInstance(),
-        AppDatabase.getInstance(getApplication()).charDao()
-    )
+    private val _charRepo: CharacterDataSource =
+        MainCharRepo(
+            ApiService.getInstance(),
+            AppDatabase.getInstance(getApplication()).charDao()
+        )
 
     private val _episode = MutableLiveData<EpisodeModel>()
     private val _chars = MutableLiveData<List<Character>>()
@@ -38,9 +42,10 @@ class EpisodeViewModel(val id: Long, app: Application) : AndroidViewModel(app) {
         return@map list.toCharToShowList()
     }
 
-    private val _episodeRepo: EpisodeDataSource = EpisodeRepo(
-        ApiService.getInstance()
-    )
+    private val _episodeRepo: EpisodeDataSource =
+        EpisodeRepo(
+            ApiService.getInstance()
+        )
 
     init {
         loadEpisode()

@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki.data.repository
+package com.aura.project.rickandmortywiki.data.repository.char_repo
 
 import android.util.SparseArray
 import com.aura.project.rickandmortywiki.UrlTransformer
@@ -8,7 +8,8 @@ import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 
-class CharNetRepo(private val charApi: ApiService) : CharacterDataSourceInternal {
+class CharNetRepo(private val charApi: ApiService) :
+    CharacterDataSourceInternal {
 
     private val _cache = SparseArray<List<Character>>()
 

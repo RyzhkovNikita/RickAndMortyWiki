@@ -1,16 +1,20 @@
-package com.aura.project.rickandmortywiki.data.repository
+package com.aura.project.rickandmortywiki.data.repository.char_repo
 
 import com.aura.project.rickandmortywiki.data.Character
+import com.aura.project.rickandmortywiki.data.repository.RepoFactory
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.character.CharDao
 
-class MainCharRepo(apiService: ApiService, charDao: CharDao) : CharacterDataSource {
+class MainCharRepo(apiService: ApiService, charDao: CharDao) :
+    CharacterDataSource {
 
-    private val factory: RepoFactory = RepoFactory(apiService, charDao)
+    private val factory: RepoFactory =
+        RepoFactory(apiService, charDao)
 
     private lateinit var strategyImpl: CharacterDataSourceInternal
 
-    override var strategy: Strategy = DefaultStrategy
+    override var strategy: Strategy =
+        DefaultStrategy
         set(value) {
             field = value
             strategyImpl = when (value) {

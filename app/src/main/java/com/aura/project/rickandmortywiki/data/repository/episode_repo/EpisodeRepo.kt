@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki.data.repository
+package com.aura.project.rickandmortywiki.data.repository.episode_repo
 
 import com.aura.project.rickandmortywiki.UrlTransformer
 import com.aura.project.rickandmortywiki.data.Episode
@@ -9,7 +9,8 @@ import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class EpisodeRepo(private val apiService: ApiService) : EpisodeDataSource {
+class EpisodeRepo(private val apiService: ApiService) :
+    EpisodeDataSource {
     override suspend fun getEpisodesFromUrls(urls: List<String>): RepoRequest<List<Episode>> =
         withContext(Dispatchers.IO) {
             val requestPath = UrlTransformer.extractEpisodeRequestPath(urls)

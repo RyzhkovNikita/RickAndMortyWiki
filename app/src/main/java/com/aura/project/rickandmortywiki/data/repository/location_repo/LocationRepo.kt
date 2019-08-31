@@ -1,4 +1,4 @@
-package com.aura.project.rickandmortywiki.data.repository
+package com.aura.project.rickandmortywiki.data.repository.location_repo
 
 import com.aura.project.rickandmortywiki.UrlTransformer
 import com.aura.project.rickandmortywiki.data.FailedRequest
@@ -10,7 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class LocationRepo(private val apiService: ApiService) : LocationDataSource {
+class LocationRepo(private val apiService: ApiService) :
+    LocationDataSource {
     override suspend fun getLocation(id: Long): RepoRequest<LocationPlain> = withContext(Dispatchers.IO){
         try {
             val response = apiService.getLocation(id).execute()
