@@ -1,25 +1,22 @@
 package com.aura.project.rickandmortywiki.data.repository.char_repo
 
 import com.aura.project.rickandmortywiki.data.Character
+import com.aura.project.rickandmortywiki.data.repository.FilterParams
 import com.aura.project.rickandmortywiki.data.repository.repo_factory.RepoFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class MainCharRepo(private val factory: RepoFactory) :
     CharacterDataSource {
-
-    private var repo: CharacterDataSourceInternal = factory.createDefaultRepo()
-
+    private var repo: CharacterDataSource = factory.createDefaultRepo()
     private val dispatcher = Dispatchers.IO
-
-    override var strategy: Strategy = DefaultStrategy
+    override var filterParams: FilterParams = FilterParams()
         set(value) {
             field = value
-            repo = when (value) {
-                is DefaultStrategy -> factory.createDefaultRepo()
-                is NameFilterStrategy -> factory.createNameFilter(value.name)
-                is StatusFilterStrategy -> factory.createStatusFilter(value.status)
-            }
+            repo = if (value.isEmpty())
+                factory.createDefaultRepo()
+            else
+                factory.createNetRepo(value)
         }
 
     override suspend fun getCharPage(page: Int) = withContext(dispatcher) { repo.getCharPage(page) }

@@ -4,10 +4,12 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.repository.FilterParams
 import com.aura.project.rickandmortywiki.data.repository.repo_factory.RepoFactory
 
-open class DefaultRepo(factory: RepoFactory) : CharacterDataSourceInternal {
+open class DefaultRepo(factory: RepoFactory) : CharacterDataSource {
 
+    override var filterParams: FilterParams = FilterParams()
     private val localRepo = factory.createLocalRepo()
     private val netRepo = factory.createNetRepo()
 

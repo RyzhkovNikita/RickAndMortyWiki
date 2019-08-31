@@ -5,11 +5,13 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.repository.FilterParams
 import com.aura.project.rickandmortywiki.data.room.character.CharDao
 
 class CharLocalRepo(private val charDao: CharDao) :
-    CharacterDataSourceInternal {
+    CharacterDataSource {
 
+    override var filterParams: FilterParams = FilterParams()
     private val _PAGE_SIZE = 20
 
     override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> {

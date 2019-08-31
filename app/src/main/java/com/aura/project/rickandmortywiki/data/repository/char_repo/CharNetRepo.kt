@@ -6,10 +6,13 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.repository.FilterParams
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 
-class CharNetRepo(private val charApi: ApiService) :
-    CharacterDataSourceInternal {
+class CharNetRepo(
+    override var filterParams: FilterParams,
+    private val charApi: ApiService
+) : CharacterDataSource {
 
     private val _cache = SparseArray<List<Character>>()
 
