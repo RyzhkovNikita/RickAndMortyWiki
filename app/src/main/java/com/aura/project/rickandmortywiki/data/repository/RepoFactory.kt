@@ -13,14 +13,10 @@ class RepoFactory(private val apiService: ApiService, private val charDao: CharD
     }
 
     fun createNameFilter(name: String): NameCharFilter {
-        val localRepo = createLocalRepo()
-        val netRepo = createNetRepo()
         return NameCharFilter(name, apiService, charDao)
     }
 
     fun createStatusFilter(status: String): StatusCharFilter {
-        val localRepo = createLocalRepo()
-        val netRepo = createNetRepo()
         return StatusCharFilter(status, apiService, charDao)
     }
 }
