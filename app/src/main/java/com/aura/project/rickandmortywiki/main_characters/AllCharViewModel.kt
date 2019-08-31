@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.aura.project.rickandmortywiki.*
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.repository.RepoFactory
 import com.aura.project.rickandmortywiki.data.repository.char_repo.CharacterDataSource
 import com.aura.project.rickandmortywiki.data.repository.char_repo.MainCharRepo
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
@@ -27,8 +28,10 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
 
     private val _charRepo: CharacterDataSource =
         MainCharRepo(
-            ApiService.getInstance(),
-            AppDatabase.getInstance(getApplication()).charDao()
+            RepoFactory(
+                ApiService.getInstance(),
+                AppDatabase.getInstance(getApplication()).charDao()
+            )
         )
 
     init {

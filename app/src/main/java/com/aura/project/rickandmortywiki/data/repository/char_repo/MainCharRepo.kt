@@ -5,11 +5,8 @@ import com.aura.project.rickandmortywiki.data.repository.RepoFactory
 import com.aura.project.rickandmortywiki.data.retrofit.ApiService
 import com.aura.project.rickandmortywiki.data.room.character.CharDao
 
-class MainCharRepo(apiService: ApiService, charDao: CharDao) :
+class MainCharRepo(private val factory: RepoFactory) :
     CharacterDataSource {
-
-    private val factory: RepoFactory =
-        RepoFactory(apiService, charDao)
 
     private lateinit var strategyImpl: CharacterDataSourceInternal
 
