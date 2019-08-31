@@ -1,9 +1,10 @@
 package com.aura.project.rickandmortywiki.data.repository.char_repo
 
 import com.aura.project.rickandmortywiki.data.Character
+import com.aura.project.rickandmortywiki.data.repository.RepoFactory
 import com.aura.project.rickandmortywiki.data.repository.RepoFactoryImpl
 
-class MainCharRepo(private val factory: RepoFactoryImpl) :
+class MainCharRepo(private val factory: RepoFactory) :
     CharacterDataSource {
 
     private lateinit var strategyImpl: CharacterDataSourceInternal

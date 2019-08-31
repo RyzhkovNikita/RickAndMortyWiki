@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.LocationPlain
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.repository.RepoFactoryImpl
 import com.aura.project.rickandmortywiki.data.repository.char_repo.CharacterDataSource
 import com.aura.project.rickandmortywiki.data.repository.char_repo.MainCharRepo
 import com.aura.project.rickandmortywiki.data.repository.location_repo.LocationDataSource
@@ -19,8 +20,10 @@ class LocationViewModel(val id: Long, app: Application) : AndroidViewModel(app) 
 
     private val _charRepo: CharacterDataSource =
         MainCharRepo(
-            ApiService.getInstance(),
-            AppDatabase.getInstance(getApplication()).charDao()
+            RepoFactoryImpl(
+                ApiService.getInstance(),
+                AppDatabase.getInstance(getApplication()).charDao()
+            )
         )
 
     private val _locationRepo: LocationDataSource =

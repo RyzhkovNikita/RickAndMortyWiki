@@ -4,11 +4,12 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.RepoRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.repository.RepoFactory
 import com.aura.project.rickandmortywiki.data.repository.RepoFactoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-open class DefaultRepo(factory: RepoFactoryImpl) : CharacterDataSourceInternal {
+open class DefaultRepo(factory: RepoFactory) : CharacterDataSourceInternal {
 
     private val localRepo = factory.createLocalRepo()
     private val netRepo = factory.createNetRepo()

@@ -6,6 +6,7 @@ import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.Episode
 import com.aura.project.rickandmortywiki.data.FailedRequest
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
+import com.aura.project.rickandmortywiki.data.repository.RepoFactoryImpl
 import com.aura.project.rickandmortywiki.data.repository.char_repo.CharacterDataSource
 import com.aura.project.rickandmortywiki.data.repository.char_repo.MainCharRepo
 import com.aura.project.rickandmortywiki.data.repository.episode_repo.EpisodeDataSource
@@ -25,8 +26,10 @@ class CharacterDetailsViewModel(var id: Long, app: Application) : AndroidViewMod
         EpisodeRepo(ApiService.getInstance())
     private val _charRepo: CharacterDataSource =
         MainCharRepo(
-            ApiService.getInstance(),
-            AppDatabase.getInstance(getApplication()).charDao()
+            RepoFactoryImpl(
+                ApiService.getInstance(),
+                AppDatabase.getInstance(getApplication()).charDao()
+            )
         )
 
     val loading: LiveData<Boolean>
