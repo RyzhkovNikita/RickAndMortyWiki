@@ -17,7 +17,11 @@ class CharNetRepo(
     private val _cache = SparseArray<List<Character>>()
 
     override suspend fun getCharPage(page: Int): RepoRequest<List<Character>> {
-        val response = charApi.getCharPage(page).execute()
+        val response = charApi.getCharPage(
+            page,
+            filterParams.name,
+            filterParams.status
+        ).execute()
         if (response.isSuccessful)
             return SuccessfulRequest(
                 body = response.body()!!.characters,
