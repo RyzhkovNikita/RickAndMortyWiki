@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aura.project.rickandmortywiki.*
@@ -23,6 +26,9 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
     private lateinit var viewModel: AllCharViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CharacterAdapter
+    private lateinit var toolbar: Toolbar
+    private lateinit var toolbarTitle: TextView
+    private lateinit var toolbarSearch: SearchView
     private var showError = false
     private val currentListItem
         get() = viewModel.charList.value
@@ -56,11 +62,6 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.all_char_fragment, container, false)
-        val toolbar = activity!!.actionBar
-        toolbar?.title = "TTTITTL"
-        toolbar?.setCustomView(R.layout.error_layout)
-        /*val title = toolbar?.findViewById<TextView>(R.id.toolbar_title)
-        title?.text = "Worrrrrrks"*/
         adapter = CharacterAdapter(this)
         recyclerView = view.findViewById(R.id.char_recycler)
         val layoutManager = recyclerView.layoutManager as GridLayoutManager
@@ -83,7 +84,29 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AllCharViewModel::class.java)
+        toolbar = (activity as MainActivity).toolbar
+        toolbarTitle = (activity as MainActivity).toolbarTitle
+        toolbarSearch = (activity as MainActivity).toolbarSearch
+        toolbarSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.textChange(newText)
+                return true
+            }
+        })
+        toolbarSearch.setOnSearchClickListener {
+            toolbarTitle.visibility = View.GONE
+            viewModel.searchOpen()
+        }
+        toolbarSearch.setOnCloseListener {
+            toolbarTitle.visibility = View.VISIBLE
+            viewModel.searchClose()
+            return@setOnCloseListener false
+        }
+        viewModel = ViewModelProvider(this).get(AllCharViewModel::class.java)
         viewModel.apply {
             charList.observe(viewLifecycleOwner, _pagedListObserver)
             state.observe(viewLifecycleOwner, _stateObserver)

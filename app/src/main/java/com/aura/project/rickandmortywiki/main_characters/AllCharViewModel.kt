@@ -6,7 +6,6 @@ import androidx.lifecycle.*
 import com.aura.project.rickandmortywiki.*
 import com.aura.project.rickandmortywiki.data.Character
 import com.aura.project.rickandmortywiki.data.SuccessfulRequest
-import com.aura.project.rickandmortywiki.data.repository.FilterParams
 import com.aura.project.rickandmortywiki.data.repository.char_repo.CharacterDataSource
 import com.aura.project.rickandmortywiki.data.repository.char_repo.MainCharRepo
 import com.aura.project.rickandmortywiki.data.repository.repo_factory.RepoFactoryImpl
@@ -74,5 +73,17 @@ class AllCharViewModel(application: Application) : AndroidViewModel(application)
 
     fun tryButtonClicked() {
         launchLoading { loadPage(_currentLoadedPages + 1) }
+    }
+
+    fun searchOpen() {
+
+    }
+
+    fun searchClose() {
+
+    }
+
+    fun textChange(text: String?) {
+
     }
 }
