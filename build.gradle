@@ -24,8 +24,33 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
     }
+}
+
+task hello {
+    group = 'Welcome'
+    description = 'Greetings you as well as it may'
+    doLast {
+        println("HELLOW MOTHERFUCKER")
+    }
+}
+
+class Greetings extends DefaultTask {
+    String message
+    int repeat
+
+    @TaskAction
+    void sayGreetings() {
+        for (int i = 0; i < repeat; i++)
+            println("$i. $message")
+    }
+}
+
+task helloClass(type: Greetings) {
+    group = 'Welcome'
+    description = 'Greetings from class'
+    message = 'Message from class greetings task'
+    repeat = 4
 }
 
 task clean(type: Delete) {
