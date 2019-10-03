@@ -53,4 +53,11 @@ class MainActivity : AppCompatActivity(), Router {
 
         transaction.commit()
     }
+
+    override fun onBackPressed() {
+        if (toolbarSearch.isIconified)
+            super.onBackPressed()
+        else
+            toolbarSearch.isIconified = true
+    }
 }
