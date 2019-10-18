@@ -87,6 +87,15 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
         toolbar = (activity as MainActivity).toolbar
         toolbarTitle = (activity as MainActivity).toolbarTitle
         toolbarSearch = (activity as MainActivity).toolbarSearch
+        viewModel = ViewModelProvider(this).get(AllCharViewModel::class.java)
+        viewModel.apply {
+            charList.observe(viewLifecycleOwner, _pagedListObserver)
+            state.observe(viewLifecycleOwner, _stateObserver)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
         toolbarSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -106,11 +115,6 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
             viewModel.searchClose()
             return@setOnCloseListener false
         }
-        viewModel = ViewModelProvider(this).get(AllCharViewModel::class.java)
-        viewModel.apply {
-            charList.observe(viewLifecycleOwner, _pagedListObserver)
-            state.observe(viewLifecycleOwner, _stateObserver)
-        }
     }
 
     override fun onCharClicked(characterId: Long) {
@@ -126,10 +130,14 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
     }
 
     @ExperimentalCoroutinesApi
-    override fun onDestroy() {
+    override fun onDestroyView() {
         if (::adapter.isInitialized)
             adapter.onDestroy()
-        super.onDestroy()
+        (recyclerView.layoutManager as GridLayoutManager).spanSizeLookup = null
+        recyclerView.clearOnScrollListeners()
+        toolbarSearch.setOnQueryTextListener(null)
+        toolbarSearch.setOnQueryTextListener(null)
+        super.onDestroyView()
     }
 
 }
