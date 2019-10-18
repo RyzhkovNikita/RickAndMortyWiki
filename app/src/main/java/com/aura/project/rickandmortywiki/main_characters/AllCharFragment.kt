@@ -129,14 +129,18 @@ class AllCharFragment : Fragment(), CharacterAdapter.OnItemClickListener,
         viewModel.listEndReached()
     }
 
+    override fun onPause() {
+        toolbarSearch.setOnQueryTextListener(null)
+        toolbarSearch.setOnCloseListener(null)
+        toolbarSearch.setOnSearchClickListener(null)
+        super.onPause()
+    }
     @ExperimentalCoroutinesApi
     override fun onDestroyView() {
         if (::adapter.isInitialized)
             adapter.onDestroy()
         (recyclerView.layoutManager as GridLayoutManager).spanSizeLookup = null
         recyclerView.clearOnScrollListeners()
-        toolbarSearch.setOnQueryTextListener(null)
-        toolbarSearch.setOnQueryTextListener(null)
         super.onDestroyView()
     }
 
